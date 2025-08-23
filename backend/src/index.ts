@@ -20,7 +20,12 @@ const app = express();
 
 
 app.use(cors(corsOption));
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({
+    extended:true,
+    limit:'16kb'
+}));
 
 // routes required 
 // create user
