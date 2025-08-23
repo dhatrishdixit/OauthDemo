@@ -2,35 +2,54 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 import dotenv from "dotenv";
 import { userSchema } from "./types/zod.js";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 dotenv.config({
     path:"../env"
 })
 
-
-
-// routes required 
-// create user 
-
+const corsOption = {
+  origin: process.env.APP_ENV == 'developement' ? '*' : process.env.ORIGIN,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+}
 const app = express();
 
-async function test(){
-    try {
-        const res = await prisma.user.create({
-        data:{
-            name:"test5",
-            email:"test5"
-        }
-    })
 
-    console.log("test successfull : ",res)
-    } catch (error) {
-        console.log(error)
-    }
-}
+app.use(cors(corsOption));
+app.use(cookieParser())
+
+// routes required 
+// create user
+// sign in
+// google stuff
+// dashboard
+// userInfo
 
 
-test();
+
+app.listen(parseInt(process.env.PORT || '8080'),()=>{
+    console.log(`server is running at PORT :${process.env.PORT || 8080}`)
+})
+
+// async function test(){
+//     try {
+//         const res = await prisma.user.create({
+//         data:{
+//             name:"test6",
+//             email:"test6"
+//         }
+//     })
+
+//     console.log("test successfull : ",res)
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
+
+// test();
 
