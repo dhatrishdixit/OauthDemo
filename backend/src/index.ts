@@ -1,14 +1,27 @@
 import { PrismaClient } from "@prisma/client";
+import express from "express";
+import dotenv from "dotenv";
+import { userSchema } from "./types/zod.js";
 
 const prisma = new PrismaClient();
 
+dotenv.config({
+    path:"../env"
+})
+
+
+
+// routes required 
+// create user 
+
+const app = express();
 
 async function test(){
     try {
         const res = await prisma.user.create({
         data:{
-            name:"test2",
-            email:"test3"
+            name:"test5",
+            email:"test5"
         }
     })
 
@@ -17,6 +30,7 @@ async function test(){
         console.log(error)
     }
 }
+
 
 test();
 
