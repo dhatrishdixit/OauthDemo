@@ -5,3 +5,5 @@ export class ApiError extends Error {
         this.status = statusCode;
     }
 }
+
+export type ApiErrorTypes = {status:number} & Error

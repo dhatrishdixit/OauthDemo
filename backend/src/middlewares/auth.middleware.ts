@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import type { Request,Response,NextFunction } from "express";
 import { ApiError } from "../utils/ApiError.js";
 import { getUserById } from "../controllers/auth.controller.js";
-
+import type { ApiErrorTypes } from "../utils/ApiError.js";
 
 export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
        try {
@@ -21,7 +21,13 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
           req.user = userInfo;
           next();
 
-       } catch (error) {
-        
+       } catch (error: any) {
+          const err : ApiErrorTypes = error
+          res
+            .status(err.status)
+            .json({
+               message:err.message
+            })
+
        }
 }

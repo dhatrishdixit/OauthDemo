@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { TloginRead } from "./general.ts";
+import { TloginRead } from "./general.js";
 
 
 declare global {
