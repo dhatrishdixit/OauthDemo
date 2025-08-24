@@ -8,5 +8,10 @@ export declare const userSchema: z.ZodObject<{
     refreshToken: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     updatedAt: z.ZodOptional<z.ZodDate>;
+    authType: z.ZodEnum<{
+        GoogleLogin: "GoogleLogin";
+        PasswordLogin: "PasswordLogin";
+        Both: "Both";
+    }>;
 }, z.core.$strip>;
 //# sourceMappingURL=zod.d.ts.map

@@ -41,18 +41,21 @@ app.listen(parseInt(process.env.PORT || '8080'),()=>{
 })
 
 // async function test(){
-//     try {
-//         const res = await prisma.user.create({
-//         data:{
-//             name:"test6",
-//             email:"test6"
-//         }
-//     })
-
-//     console.log("test successfull : ",res)
-//     } catch (error) {
-//         console.log(error)
-//     }
+//    try {
+//      // const res = await prisma.user.create({
+//         // data:{
+//         //     name:"test6",
+//         //     email:"test6"
+//         // }
+//         const res = await prisma.user.findUnique({
+//             where : {
+//                 email: "test6"
+//             }
+//         });
+//         console.log("test successfull : ",res)
+//    } catch (error) {
+//      console.log(error)
+//    }
 // }
 
 
