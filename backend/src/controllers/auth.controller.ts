@@ -170,14 +170,104 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
 
 }
 
-const logout = async () => {}
+const logout = async (req:Request,res:Response) => {
+    try {
+        
+        const id = req.user?.id as string;
+        await db.user.update({
+            where : { id },
+            data : {
+                refreshToken:null
+            }
+        });
 
-const oAuthHandler = async () => {}
+        return res
+        .status(201)
+        .clearCookie('accessToken',accessTokenCookieOption)
+        .clearCookie('refreshToken',refreshTokenCookieOption)
+        .json(
+            {
+                message : "user logged out"
+            }
+        )
 
-const openIdPasswordAdditionAndChange = async () => {}
+    } catch (error) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        return res
+        .status(err.status)
+        .json({
+            message:err.message
+        })
+    }
+}
 
-const refreshAccessTokenHandler = async () => {}
+const oAuthHandler = async (req:Request,res:Response) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
+
+}
+
+const refreshAccessTokenHandler = async (req:Request,res:Response) => {
+    try {
+        const incomingRefreshToken = req.cookies?.refreshToken 
+
+        if(!incomingRefreshToken) throw new ApiError(401,"refresh token is absent");
+        
+        let decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET as string);
+
+        const user = await db.user.findUnique({
+            where:{
+                refreshToken:decodedToken as string
+            },
+        })
+
+        if(user?.refreshToken != decodedToken) throw new ApiError(401,"refreshToken doesnt match");
+
+        const accessToken = generateAccessToken(user.id);
+        
+        const newRefreshToken = generateRefreshToken(user.id);
+
+        await db.user.update({
+            where : {
+                id : user.id
+            },
+            data:{
+                refreshToken:newRefreshToken
+            }
+        });
+
+        return res
+        .status(201)
+        .cookie("accessToken",accessToken,accessTokenCookieOption)
+        .cookie("refreshToken",refreshTokenCookieOption,refreshTokenCookieOption)
+        .json({
+            message: "access token is refreshed successfully"
+        })
+
+    } catch (error) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        return res
+        .status(err.status)
+        .json({
+            message:err.message
+        })
+
+    }
+}
 
 export {
-    getUserById
+    getUserById ,
+    registerUserByCredentials , 
+    refreshAccessTokenHandler , 
+    oAuthHandler , 
+    logout , 
+    loginUserByCredentials , 
+    openIdPasswordAdditionAndChange
+
 }
