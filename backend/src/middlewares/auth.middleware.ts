@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
 import type { Request,Response,NextFunction } from "express";
 import { ApiError } from "../utils/ApiError.js";
 import { getUserById } from "../controllers/auth.controller.js";
