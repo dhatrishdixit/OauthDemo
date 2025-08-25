@@ -116,6 +116,8 @@ const loginUserByCredentials = async (req, res) => {
             throw new ApiError(406, "password is not correct");
         const accessToken = generateAccessToken(user.id);
         const refreshToken = generateRefreshToken(user.id);
+        // console.log("__________accessToken____________",accessToken);
+        // console.log("____________refreshToken____________",refreshToken);
         const loggedInUser = await db.user.update({
             where: {
                 id: user.id
@@ -195,8 +197,10 @@ const openIdPasswordAdditionAndChange = async (req, res) => {
 const refreshAccessTokenHandler = async (req, res) => {
     try {
         const incomingRefreshToken = req.cookies?.refreshToken;
+        console.log("________cookie_______", req.cookies);
         if (!incomingRefreshToken)
             throw new ApiError(401, "refresh token is absent");
+        console.log("incomingRefreshToken______________", incomingRefreshToken);
         const payload = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
         const user = await db.user.findUnique({
             where: {
@@ -207,6 +211,8 @@ const refreshAccessTokenHandler = async (req, res) => {
             throw new ApiError(401, "user not found");
         if (user?.refreshToken != incomingRefreshToken)
             throw new ApiError(401, "refreshToken doesnt match");
+        console.log(user);
+        console.log('_______________id______________', user.id);
         const accessToken = generateAccessToken(user.id);
         const newRefreshToken = generateRefreshToken(user.id);
         await db.user.update({
@@ -220,17 +226,23 @@ const refreshAccessTokenHandler = async (req, res) => {
         return res
             .status(201)
             .cookie("accessToken", accessToken, accessTokenCookieOption)
-            .cookie("refreshToken", refreshTokenCookieOption, refreshTokenCookieOption)
+            .cookie("refreshToken", newRefreshToken, refreshTokenCookieOption)
             .json({
             message: "access token is refreshed successfully"
         });
     }
     catch (error) {
         const err = error;
+        console.log(error);
+        // return res
+        // .status(err.status)
+        // .json({
+        //     message:err.message
+        // })
         return res
-            .status(err.status)
+            //.status(err.status)
             .json({
-            message: err.message
+            message: error
         });
     }
 };

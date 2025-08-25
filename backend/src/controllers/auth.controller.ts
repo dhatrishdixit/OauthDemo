@@ -163,6 +163,10 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
         const accessToken = generateAccessToken(user.id);
         const refreshToken = generateRefreshToken(user.id);
 
+        // console.log("__________accessToken____________",accessToken);
+        // console.log("____________refreshToken____________",refreshToken);
+        
+
         const loggedInUser = await db.user.update({
             where : {
                 id : user.id
@@ -254,9 +258,13 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
 
 const refreshAccessTokenHandler = async (req:Request,res:Response) => {
     try {
-        const incomingRefreshToken = req.cookies?.refreshToken 
+        const incomingRefreshToken = req.cookies?.refreshToken
+        
+        //console.log("________cookie_______",req.cookies)
 
         if(!incomingRefreshToken) throw new ApiError(401,"refresh token is absent");
+
+        //console.log("incomingRefreshToken______________",incomingRefreshToken)
         
         type payloadType = {
              id : string ,
@@ -275,9 +283,10 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
         if(!user) throw new ApiError(401,"user not found")
 
         if(user?.refreshToken != incomingRefreshToken) throw new ApiError(401,"refreshToken doesnt match");
-
-        const accessToken = generateAccessToken(user.id);
         
+        // console.log(user);
+        // console.log('_______________id______________',user.id)
+        const accessToken = generateAccessToken(user.id);
         const newRefreshToken = generateRefreshToken(user.id);
 
         await db.user.update({
@@ -292,18 +301,26 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
         return res
         .status(201)
         .cookie("accessToken",accessToken,accessTokenCookieOption)
-        .cookie("refreshToken",refreshTokenCookieOption,refreshTokenCookieOption)
+        .cookie("refreshToken",newRefreshToken,refreshTokenCookieOption)
         .json({
             message: "access token is refreshed successfully"
         })
 
     } catch (error) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
+       // console.log(error);
+
         return res
         .status(err.status)
         .json({
             message:err.message
         })
+
+        // return res
+        //.status(err.status)
+        // json({
+        //     message:error
+        // }).
 
 
     }
