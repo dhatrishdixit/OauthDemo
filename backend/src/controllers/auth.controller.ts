@@ -61,8 +61,13 @@ function generateAccessToken(id:string){
 
 
 
-const getUserById = async (id:string) => {
-       return await db.user.findUnique({
+const getUserById = async (req:Request,res:Response) => {
+       
+       const { id } = req.body ;
+       
+       try {
+                
+       const user =  await db.user.findUnique({
            where : {
                id 
            },
@@ -74,6 +79,24 @@ const getUserById = async (id:string) => {
            }
        }) 
 
+       return res
+       .status(201)
+       .json({
+          message:"user found",
+          data : user
+       })
+
+
+       } catch (error) {
+         
+          const err : ApiErrorTypes = error as ApiErrorTypes ;
+        return res
+        .status(err.status)
+        .json({
+            message:err.message
+        })
+
+       }
 }
 
 
@@ -204,13 +227,28 @@ const logout = async (req:Request,res:Response) => {
 const oAuthHandler = async (req:Request,res:Response) => {
     try {
         
+
     } catch (error) {
-        
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        return res
+        .status(err.status)
+        .json({
+            message:err.message
+        })
     }
 }
 
 const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
-
+     try {
+        
+     } catch (error) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        return res
+        .status(err.status)
+        .json({
+            message:err.message
+        })
+     }
 }
 
 const refreshAccessTokenHandler = async (req:Request,res:Response) => {
