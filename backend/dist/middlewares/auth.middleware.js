@@ -7,10 +7,12 @@ export const verifyJWT = async (req, res, next) => {
         const cookie = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
         if (!cookie)
             throw new ApiError(401, "accessToken not present");
-        const userID = jwt.verify(cookie, process.env.ACCESS_TOKEN_SECRET);
+        const payload = jwt.verify(cookie, process.env.ACCESS_TOKEN_SECRET);
+        const id = payload.id;
+        // console.log("_______________________id________________:",id)
         const userInfo = await db.user.findUnique({
             where: {
-                id: userID
+                id: id
             },
             select: {
                 id: true,
@@ -26,12 +28,17 @@ export const verifyJWT = async (req, res, next) => {
         next();
     }
     catch (error) {
+        //console.log("err",error)
         const err = error;
         return res
             .status(err.status)
             .json({
             message: err.message
         });
+        //  return res
+        //       .json({
+        //       message:error
+        //    })
     }
 };
 //# sourceMappingURL=auth.middleware.js.map

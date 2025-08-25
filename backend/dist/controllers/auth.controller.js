@@ -197,13 +197,15 @@ const refreshAccessTokenHandler = async (req, res) => {
         const incomingRefreshToken = req.cookies?.refreshToken;
         if (!incomingRefreshToken)
             throw new ApiError(401, "refresh token is absent");
-        let decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const payload = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
         const user = await db.user.findUnique({
             where: {
-                refreshToken: decodedToken
+                id: payload.id
             },
         });
-        if (user?.refreshToken != decodedToken)
+        if (!user)
+            throw new ApiError(401, "user not found");
+        if (user?.refreshToken != incomingRefreshToken)
             throw new ApiError(401, "refreshToken doesnt match");
         const accessToken = generateAccessToken(user.id);
         const newRefreshToken = generateRefreshToken(user.id);

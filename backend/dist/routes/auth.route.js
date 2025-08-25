@@ -9,8 +9,8 @@ router.route("/register").post(validateUserData, registerUserByCredentials);
 router.route("/googleAuth").post(oAuthHandler);
 //secured routes 
 router.route("/getUserData").get(verifyJWT, getUserById);
-router.route("/refreshAccessToken").get(verifyJWT, refreshAccessTokenHandler);
-router.route("/addPasswordOAuth").get(verifyJWT, openIdPasswordAdditionAndChange);
-router.route("/logout").get(verifyJWT, logout);
+router.route("/refreshAccessToken").post(verifyJWT, refreshAccessTokenHandler);
+router.route("/addPasswordOAuth").post(verifyJWT, openIdPasswordAdditionAndChange);
+router.route("/logout").post(verifyJWT, logout);
 export default router;
 //# sourceMappingURL=auth.route.js.map

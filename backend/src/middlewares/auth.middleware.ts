@@ -13,11 +13,17 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
 
           if(!cookie) throw new ApiError(401,"accessToken not present");
           
-          const userID = jwt.verify(cookie,process.env.ACCESS_TOKEN_SECRET as string);
-
+          type payloadType = {
+            id : string ,
+            iat : number
+          }
+          const payload:payloadType = jwt.verify(cookie,process.env.ACCESS_TOKEN_SECRET as string) as payloadType ;
+          
+          const id = payload.id;
+         // console.log("_______________________id________________:",id)
           const userInfo = await db.user.findUnique({
            where : {
-               id:userID as string
+               id:id as string
            },
            select : {
                id : true ,
@@ -34,6 +40,7 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
           next();
 
        } catch (error: any) {
+          //console.log("err",error)
           const err : ApiErrorTypes = error
           return res
             .status(err.status)
@@ -41,5 +48,10 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
                message:err.message
             })
 
+
+         //  return res
+         //       .json({
+         //       message:error
+         //    })
        }
 }

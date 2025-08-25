@@ -258,15 +258,23 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
 
         if(!incomingRefreshToken) throw new ApiError(401,"refresh token is absent");
         
-        let decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET as string);
+        type payloadType = {
+             id : string ,
+            iat : number
+        }
+
+        const payload = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET as string) as payloadType;
+
 
         const user = await db.user.findUnique({
             where:{
-                refreshToken:decodedToken as string
+                id: payload.id
             },
         })
+        
+        if(!user) throw new ApiError(401,"user not found")
 
-        if(user?.refreshToken != decodedToken) throw new ApiError(401,"refreshToken doesnt match");
+        if(user?.refreshToken != incomingRefreshToken) throw new ApiError(401,"refreshToken doesnt match");
 
         const accessToken = generateAccessToken(user.id);
         
@@ -296,6 +304,7 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
         .json({
             message:err.message
         })
+
 
     }
 }
