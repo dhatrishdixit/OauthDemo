@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/controllers/auth.controller.ts","./src/middlewares/auth.middleware.ts","./src/routes/auth.route.ts","./src/routes/user.route.ts","./src/types/espress.d.ts","./src/types/general.ts","./src/types/zod.ts","./src/utils/ApiError.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/controllers/auth.controller.ts","./src/middlewares/auth.middleware.ts","./src/routes/auth.route.ts","./src/routes/user.route.ts","./src/types/express.d.ts","./src/types/general.ts","./src/types/zod.ts","./src/utils/ApiError.ts"],"version":"5.9.2"}

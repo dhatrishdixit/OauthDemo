@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import dotenv from "dotenv";
-import { userSchema } from "./types/zod.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth.route.js"
 
 export const prisma = new PrismaClient();
 
@@ -26,6 +26,8 @@ app.use(express.urlencoded({
     extended:true,
     limit:'16kb'
 }));
+
+app.use("/api/v1/auth",authRouter)
 
 // routes required 
 // create user

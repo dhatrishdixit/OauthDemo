@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { ApiError } from "../utils/ApiError.js";
+import jwt from "jsonwebtoken";
+import { userSchema } from "../types/zod.js";
 const db = new PrismaClient();
 // getUserById
 // loginUser 
@@ -12,27 +14,54 @@ const db = new PrismaClient();
 const accessTokenCookieOption = {
     httpOnly: true,
     secure: process.env.APP_ENV !== "development",
-    sameSite: process.env.APP_ENV === "development" ? "None" : "Strict",
+    sameSite: process.env.APP_ENV === "development" ? "none" : "strict",
     expires: new Date(Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000)
 };
 const refreshTokenCookieOption = {
     httpOnly: true,
     secure: process.env.APP_ENV !== "development",
-    sameSite: process.env.APP_ENV === "development" ? "None" : "Strict",
+    sameSite: process.env.APP_ENV === "development" ? "none" : "strict",
     expires: new Date(Date.now() + Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000)
 };
-const getUserById = async (id) => {
-    return await db.user.findUnique({
-        where: {
-            id
-        },
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            authType: true
-        }
-    });
+function generateRefreshToken(id) {
+    return jwt.sign({
+        id
+    }, process.env.REFRESH_TOKEN_SECRET);
+}
+function generateAccessToken(id) {
+    return jwt.sign({
+        id
+    }, process.env.ACCESS_TOKEN_SECRET);
+}
+const getUserById = async (req, res) => {
+    const { id } = req.body;
+    try {
+        const user = await db.user.findUnique({
+            where: {
+                id
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                authType: true
+            }
+        });
+        return res
+            .status(201)
+            .json({
+            message: "user found",
+            data: user
+        });
+    }
+    catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
+    }
 };
 const registerUserByCredentials = async (req, res) => {
     const { name, email, password } = req.body;
@@ -44,20 +73,185 @@ const registerUserByCredentials = async (req, res) => {
                 email,
             }
         });
+        if (existingUser)
+            throw new ApiError(411, "User already exists");
         const hashedPassword = await bcrypt.hash(password, 10);
-        // const res = await db.user.create({
-        //     data:{
-        //     }
-        // })
+        const createdUser = await db.user.create({
+            data: {
+                name,
+                email,
+                passwordHash: hashedPassword,
+                authType: "PasswordLogin"
+            }
+        });
+        return res.status(201).json({
+            message: "createdSuccessfully",
+            data: createdUser
+        });
     }
     catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
+    }
+    // after register redirect to login 
+};
+const loginUserByCredentials = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!(email && password))
+            throw new ApiError(411, "Either email or password is missing");
+        const user = await db.user.findUnique({
+            where: {
+                email
+            }
+        });
+        if (!user?.passwordHash)
+            throw new ApiError(411, "Either account not present or logged in through google");
+        const passwordCheck = await bcrypt.compare(password, user.passwordHash);
+        if (!passwordCheck)
+            throw new ApiError(406, "password is not correct");
+        const accessToken = generateAccessToken(user.id);
+        const refreshToken = generateRefreshToken(user.id);
+        const loggedInUser = await db.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                refreshToken
+            }
+        });
+        return res
+            .status(201)
+            .cookie("accessToken", accessToken, accessTokenCookieOption)
+            .cookie("refreshToken", refreshToken, refreshTokenCookieOption)
+            .json({
+            message: "user logged in",
+            data: loggedInUser
+        });
+    }
+    catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
     }
 };
-const loginUserByCredentials = async () => {
+const logout = async (req, res) => {
+    try {
+        const id = req.user?.id;
+        await db.user.update({
+            where: { id },
+            data: {
+                refreshToken: null
+            }
+        });
+        return res
+            .status(201)
+            .clearCookie('accessToken', accessTokenCookieOption)
+            .clearCookie('refreshToken', refreshTokenCookieOption)
+            .json({
+            message: "user logged out"
+        });
+    }
+    catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
+    }
 };
-const logout = async () => { };
-const oAuthHandler = async () => { };
-const openIdPasswordAdditionAndChange = async () => { };
-const refreshAccessTokenHandler = async () => { };
-export { getUserById };
+const oAuthHandler = async (req, res) => {
+    try {
+    }
+    catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
+    }
+};
+const openIdPasswordAdditionAndChange = async (req, res) => {
+    try {
+    }
+    catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
+    }
+};
+const refreshAccessTokenHandler = async (req, res) => {
+    try {
+        const incomingRefreshToken = req.cookies?.refreshToken;
+        if (!incomingRefreshToken)
+            throw new ApiError(401, "refresh token is absent");
+        let decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const user = await db.user.findUnique({
+            where: {
+                refreshToken: decodedToken
+            },
+        });
+        if (user?.refreshToken != decodedToken)
+            throw new ApiError(401, "refreshToken doesnt match");
+        const accessToken = generateAccessToken(user.id);
+        const newRefreshToken = generateRefreshToken(user.id);
+        await db.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                refreshToken: newRefreshToken
+            }
+        });
+        return res
+            .status(201)
+            .cookie("accessToken", accessToken, accessTokenCookieOption)
+            .cookie("refreshToken", refreshTokenCookieOption, refreshTokenCookieOption)
+            .json({
+            message: "access token is refreshed successfully"
+        });
+    }
+    catch (error) {
+        const err = error;
+        return res
+            .status(err.status)
+            .json({
+            message: err.message
+        });
+    }
+};
+// this is a good way to use zod 
+// can also a global error handler 
+const validateUserData = (req, res, next) => {
+    try {
+        const recievedData = req.body;
+        const data = {
+            name: recievedData.name,
+            email: recievedData.email,
+            authType: recievedData.authType
+        };
+        userSchema.parse(data);
+        next();
+    }
+    catch (error) {
+        return res
+            .status(401)
+            .json({
+            message: "Error in the recieved data"
+        });
+    }
+};
+export { getUserById, registerUserByCredentials, refreshAccessTokenHandler, oAuthHandler, logout, loginUserByCredentials, openIdPasswordAdditionAndChange, validateUserData };
 //# sourceMappingURL=auth.controller.js.map

@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import type { Request , Response } from "express";
+import type { NextFunction, Request , Response } from "express";
 import bcrypt from "bcrypt";
 import { ApiError, type ApiErrorTypes } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
+import { userSchema } from "../types/zod.js";
 
 const db = new PrismaClient();
 
@@ -299,6 +300,30 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
     }
 }
 
+
+// this is a good way to use zod 
+// can also a global error handler 
+const validateUserData = (req:Request,res:Response,next:NextFunction) => {
+      try {
+             const recievedData = req.body ;
+             const data = {
+                name :recievedData.name,
+                email :recievedData.email , 
+                authType :recievedData.authType
+             }
+             userSchema.parse(data);
+
+             next();
+
+      } catch (error) {
+            return res
+            .status(401)
+            .json({
+                message:"Error in the recieved data"
+            })
+      }
+}
+
 export {
     getUserById ,
     registerUserByCredentials , 
@@ -306,6 +331,7 @@ export {
     oAuthHandler , 
     logout , 
     loginUserByCredentials , 
-    openIdPasswordAdditionAndChange
+    openIdPasswordAdditionAndChange ,
+    validateUserData
 
 }
