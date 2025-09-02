@@ -10,12 +10,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "./ui/separator"
 import { FcGoogle } from "../assets/FcGoogle"
+// import {z} from 'zod';
+// import {zodResolver} from "@hookform/resolvers/zod";
 
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+  // const schema = z.object({
+  //   email : z.string().email(),
+    
+  // })
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="dark:border-white">
@@ -42,7 +50,7 @@ export function LoginForm({
                 <Input id="password" type="password" className="text-white" placeholder="password" required />
               </div>
               <div className="flex flex-col gap-3 items-center">
-                <Button type="submit" variant="outline" className="w-full text-white w-fit cursor-pointer">
+                <Button type="submit" variant="outline" className="w-full text-white cursor-pointer">
                   LogIn
                 </Button>
                 <div className="text-white flex justify-center items-center gap-4">
