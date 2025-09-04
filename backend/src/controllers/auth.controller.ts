@@ -175,6 +175,11 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
             },
             data:{
                 refreshToken
+            },
+            select:{
+                id:true,
+                name:true,
+                authType:true,
             }
         });
 
@@ -190,6 +195,8 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
         })
 
     } catch (error) {
+
+        console.log(error);
         const err : ApiErrorTypes = error as ApiErrorTypes ;
         return res
         .status(err.status)

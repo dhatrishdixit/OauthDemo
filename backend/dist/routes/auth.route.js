@@ -6,7 +6,7 @@ const router = Router();
 router.route("/login").post(loginUserByCredentials);
 router.route("/register").post(validateUserData, registerUserByCredentials);
 // think for this you will have to add a different middleware inbetween validation
-router.route("/googleAuth").post(oAuthHandler);
+router.route("/googleOAuth").post(oAuthHandler);
 //secured routes 
 router.route("/getUserData").get(verifyJWT, getUserById);
 router.route("/refreshAccessToken").post(verifyJWT, refreshAccessTokenHandler);
