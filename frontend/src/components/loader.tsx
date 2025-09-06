@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import {  MoonLoader } from "react-spinners";
 
 const override: CSSProperties = {
@@ -8,21 +8,12 @@ const override: CSSProperties = {
 };
 
 export function Loader() {
-  const [loading, setLoading] = useState(true);
-  const [color, setColor] = useState("#ffffff");
+
 
   return (
-    <div className="sweet-loading">
-      <button onClick={() => setLoading(!loading)}>Toggle Loader</button>
-      <input
-        value={color}
-        onChange={(input) => setColor(input.target.value)}
-        placeholder="Color of the loader"
-      />
-
+    <div>
       <MoonLoader
-        color={color}
-        loading={loading}
+        color="#d607b1"
         cssOverride={override}
         size={150}
         aria-label="Loading Spinner"

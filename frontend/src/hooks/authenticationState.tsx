@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { ApiError } from '../../../backend/src/utils/ApiError';
 
 type AuthType = "GoogleLogin" | "PasswordLogin" | "Both"
 
@@ -37,6 +38,9 @@ export const authContextProvider = (({children,user,login,logout}:contextTypePro
 })
 
 export const useAuth =function(){
+
+    if(!authContext) throw new ApiError(500,"context absent")
+
     return useContext(authContext);
 }
 
