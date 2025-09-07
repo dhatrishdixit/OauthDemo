@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import { ApiError, type ApiErrorTypes } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
 import { userSchema } from "../types/zod.js";
-import { OAuth2Client } from "google-auth-library";
 import type { userInfoType } from "../types/general.js";
 
 const db = new PrismaClient();
