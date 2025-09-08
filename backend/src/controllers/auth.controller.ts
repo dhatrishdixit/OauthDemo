@@ -61,6 +61,52 @@ function generateAccessToken(id:string){
 }
 
 
+const getCurrentUser = async (req:Request,res:Response) => {
+    try {
+        
+        const cookie = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","") ;
+
+        if(!cookie) throw new ApiError(401,"accessToken not present");
+                  
+                  type payloadType = {
+                    id : string ,
+                    iat : number
+                  }
+        const payload:payloadType = jwt.verify(cookie,process.env.ACCESS_TOKEN_SECRET as string) as payloadType ;
+                  
+        const id = payload.id;
+
+        const user =  await db.user.findUnique({
+           where : {
+               id 
+           },
+           select : {
+               id : true ,
+               name : true,
+               email : true,
+               authType : true
+           }
+       }) 
+       
+       return res
+       .status(201)
+       .json({
+          data:user,
+          success:true  
+       });
+        
+
+    } catch (error:any) {
+
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+        
+        return res
+        .status(statusCode)
+        .json(err.message);
+
+    }
+}
 
 
 const getUserById = async (req:Request,res:Response) => {
@@ -472,6 +518,6 @@ export {
     logout , 
     loginUserByCredentials , 
     openIdPasswordAdditionAndChange ,
-    validateUserData
-
+    validateUserData ,
+    getCurrentUser
 }

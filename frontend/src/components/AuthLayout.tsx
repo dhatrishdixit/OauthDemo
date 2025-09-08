@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from "@/hooks/authenticationState";
+import { useAuth } from "@/hooks/authState";
 import { Loader } from "./loader";
 
 type AuthLayoutProps = {
@@ -14,6 +14,9 @@ export const Protected = ({children,authentication=true}:AuthLayoutProps) => {
     const [loader,setLoader] = useState<boolean>(true);
 
     useEffect(()=>{
+
+        
+
         if(authentication && authStatus !== authentication) navigate("/login");
         else if(!authentication && authStatus !== authentication) navigate("/home")
         setLoader(false);

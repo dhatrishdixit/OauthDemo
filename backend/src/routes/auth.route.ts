@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { 
+    getCurrentUser,
     getUserById, 
     loginUserByCredentials, 
     logout, 
@@ -17,6 +18,7 @@ const router = Router();
 //unsecured routes 
 router.route("/login").post(loginUserByCredentials);
 router.route("/register").post(validateUserData,registerUserByCredentials);
+router.route("/currentUser").get(getCurrentUser);
 
 // think for this you will have to add a different middleware inbetween validation
 router.route("/googleOAuth").post(oAuthHandler);
