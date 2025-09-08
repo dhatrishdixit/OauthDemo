@@ -28,17 +28,13 @@ export const verifyJWT = async (req, res, next) => {
         next();
     }
     catch (error) {
-        //console.log("err",error)
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
-        //  return res
-        //       .json({
-        //       message:error
-        //    })
     }
 };
 //# sourceMappingURL=auth.middleware.js.map

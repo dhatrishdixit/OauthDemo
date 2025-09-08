@@ -89,16 +89,15 @@ const getUserById = async (req:Request,res:Response) => {
        })
 
 
-       } catch (error) {
-         
-          const err : ApiErrorTypes = error as ApiErrorTypes ;
-        return res
-        .status(err.status)
-        .json({
-            message:err.message
-        })
-
-       }
+       } catch (error:any) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
+    }
 }
 
 
@@ -132,15 +131,15 @@ const registerUserByCredentials = async (req:Request,res:Response) => {
             data:createdUser
         })
 
-    } catch (error) {
+    } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
-        return res
-        .status(err.status)
-        .json({
-            message:err.message
-        })
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
     }
-
     // after register redirect to login 
 }
 
@@ -193,15 +192,14 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
             data: loggedInUser
         })
 
-    } catch (error) {
-
-        console.log(error);
+    } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
-        return res
-        .status(err.status)
-        .json({
-            message:err.message
-        })
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
     }
 
 }
@@ -227,13 +225,14 @@ const logout = async (req:Request,res:Response) => {
             }
         )
 
-    } catch (error) {
+    } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
-        return res
-        .status(err.status)
-        .json({
-            message:err.message
-        })
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
     }
 }
 
@@ -317,13 +316,14 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
 
  
-    } catch (error) {
+    } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
-        return res
-        .status(err.status)
-        .json({
-            message:err.message
-        })
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
     }
 }
 
@@ -358,14 +358,15 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
             })
         }
 
-     } catch (error) {
+     } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
-        return res
-        .status(err.status)
-        .json({
-            message:err.message
-        })
-     }
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
+    }
 }
 
 const refreshAccessTokenHandler = async (req:Request,res:Response) => {
@@ -418,12 +419,12 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
             message: "access token is refreshed successfully"
         })
 
-    } catch (error) {
+    } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
        // console.log(error);
-
+        const statusCode = typeof err.status === "number" ? err.status : 501
         return res
-        .status(err.status)
+        .status(statusCode)
         .json({
             message:err.message
         })
@@ -454,6 +455,7 @@ const validateUserData = (req:Request,res:Response,next:NextFunction) => {
              next();
 
       } catch (error) {
+            console.log(error)
             return res
             .status(401)
             .json({

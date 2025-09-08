@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js"
+import adminRouter from "./routes/admin.route.js"
 
 export const prisma = new PrismaClient();
 
@@ -27,7 +28,8 @@ app.use(express.urlencoded({
     limit:'16kb'
 }));
 
-app.use("/api/v1/auth",authRouter)
+app.use("/api/v1/auth",authRouter);
+app.use("/api/v1/admin",adminRouter);
 
 // routes required 
 // create user

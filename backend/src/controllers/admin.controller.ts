@@ -28,11 +28,11 @@ function generateAdminToken(encryptedKey:string){
 
 }
 
-const validateAdmin = async (req:Request,res:Response) => {
+const adminLogin = async (req:Request,res:Response) => {
     try {
         const { username , password } = req.body;
 
-    if( username !== process.env.ADMIN_SECRET_USERNAME && password !== process.env.ADMIN_SECRET_PASSWORD) throw new ApiError(401,"incorrect admin credentials")
+    if( username !== process.env.ADMIN_SECRET_USERNAME || password !== process.env.ADMIN_SECRET_PASSWORD) throw new ApiError(401,"incorrect admin credentials")
 
     if(!process.env.ADMIN_SECRET_KEY) throw new ApiError(501,"Admin secret key absent in server")
     
@@ -49,10 +49,11 @@ const validateAdmin = async (req:Request,res:Response) => {
     })
             
 
-    } catch (error) {
+    } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
               return res
-              .status(err.status)
+              .status(statusCode)
               .json({
                   message:err.message
               })  
@@ -71,18 +72,19 @@ const allUserInfo = async (req:Request,res:Response) => {
         })
    
      } catch (error:any) {
-         const err : ApiErrorTypes = error
-            return res
-                    .status(err.status)
-                    .json({
-                       message:err.message
-                    })
-     }
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
+    }
 }
 
 
 export {
-    validateAdmin,
+    adminLogin,
     allUserInfo
 }
 

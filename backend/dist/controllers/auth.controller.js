@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
 import { userSchema } from "../types/zod.js";
-import { OAuth2Client } from "google-auth-library";
 const db = new PrismaClient();
 // getUserById
 // loginUser 
@@ -57,8 +56,9 @@ const getUserById = async (req, res) => {
     }
     catch (error) {
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -92,8 +92,9 @@ const registerUserByCredentials = async (req, res) => {
     }
     catch (error) {
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -142,10 +143,10 @@ const loginUserByCredentials = async (req, res) => {
         });
     }
     catch (error) {
-        console.log(error);
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -170,8 +171,9 @@ const logout = async (req, res) => {
     }
     catch (error) {
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -241,8 +243,9 @@ const oAuthHandler = async (req, res) => {
     }
     catch (error) {
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -278,8 +281,9 @@ const openIdPasswordAdditionAndChange = async (req, res) => {
     }
     catch (error) {
         const err = error;
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -324,8 +328,9 @@ const refreshAccessTokenHandler = async (req, res) => {
     catch (error) {
         const err = error;
         // console.log(error);
+        const statusCode = typeof err.status === "number" ? err.status : 501;
         return res
-            .status(err.status)
+            .status(statusCode)
             .json({
             message: err.message
         });
@@ -350,6 +355,7 @@ const validateUserData = (req, res, next) => {
         next();
     }
     catch (error) {
+        console.log(error);
         return res
             .status(401)
             .json({

@@ -23,13 +23,13 @@ export const validateAdmin = (req:Request,res:Response,next:NextFunction) => {
 
         next();
 
-     } catch (error:any) {
-         const err : ApiErrorTypes = error
-            return res
-                    .status(err.status)
-                    .json({
-                       message:err.message
-                    })
-        
-     }
+     }catch (error:any) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
+    }
 }

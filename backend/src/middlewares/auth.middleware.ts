@@ -39,19 +39,13 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
           req.user = userInfo;
           next();
 
-       } catch (error: any) {
-          //console.log("err",error)
-          const err : ApiErrorTypes = error
-          return res
-            .status(err.status)
-            .json({
-               message:err.message
-            })
-
-
-         //  return res
-         //       .json({
-         //       message:error
-         //    })
-       }
+       } catch (error:any) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message
+              })  
+    }
 }
