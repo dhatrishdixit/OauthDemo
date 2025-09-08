@@ -8,7 +8,7 @@ export const validateAdmin = (req, res, next) => {
             throw new ApiError(401, "admin token is absent");
         const payload = jwt.verify(cookie, process.env.ADMIN_TOKEN_SECRET);
         const adminKey = payload.key;
-        if (bcrypt.compareSync(adminKey, process.env.ADMIN_TOKEN_SECRET))
+        if (!bcrypt.compareSync(process.env.ADMIN_SECRET_KEY, adminKey))
             throw new ApiError(401, "wrong admin token");
         next();
     }

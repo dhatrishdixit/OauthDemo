@@ -19,7 +19,7 @@ export const validateAdmin = (req:Request,res:Response,next:NextFunction) => {
 
         const adminKey = payload.key;
         
-        if(bcrypt.compareSync(adminKey,process.env.ADMIN_TOKEN_SECRET as string)) throw new ApiError(401,"wrong admin token")
+        if(!bcrypt.compareSync(process.env.ADMIN_SECRET_KEY as string,adminKey)) throw new ApiError(401,"wrong admin token")
 
         next();
 

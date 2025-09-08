@@ -65,7 +65,7 @@ const allUserInfo = async (req:Request,res:Response) => {
         const userData = await db.user.findMany();
         
 
-        return res.status(201)
+        return res.status(200)
          .json({
         users : userData,
         success : true 
