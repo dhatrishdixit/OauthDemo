@@ -55,7 +55,8 @@ const adminLogin = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
+                  message:err.message,
+                  status:"fail"
               })  
     }
 }
@@ -77,8 +78,9 @@ const allUserInfo = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
-              })  
+                  message:err.message,
+                  status:"fail"
+              }) 
     }
 }
 

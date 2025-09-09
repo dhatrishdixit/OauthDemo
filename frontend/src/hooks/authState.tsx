@@ -3,9 +3,10 @@ import { ApiError } from "../../../backend/src/utils/ApiError";
 
 type AuthType = "GoogleLogin" | "PasswordLogin" | "Both"
 
-type userType = {
+export type userType = {
      id:string,
      name:string,
+     email:string,
      authType: AuthType
 }
 
@@ -16,7 +17,11 @@ type contextType = {
     logout:()=>void
 }
 
-export const authContext = createContext<contextType | null>(null);
+export const authContext = createContext<contextType>({
+    user:null,
+    login:()=>{},
+    logout:()=>{}
+});
 
 export const useAuth =function(){
 

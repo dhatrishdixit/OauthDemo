@@ -103,7 +103,10 @@ const getCurrentUser = async (req:Request,res:Response) => {
         
         return res
         .status(statusCode)
-        .json(err.message);
+        .json({
+                  message:err.message,
+                  status:"fail"
+              }) 
 
     }
 }
@@ -141,7 +144,8 @@ const getUserById = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
+                  message:err.message,
+                  status:"fail"
               })  
     }
 }
@@ -183,8 +187,9 @@ const registerUserByCredentials = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
-              })  
+                  message:err.message,
+                  status:"fail"
+              }) 
     }
     // after register redirect to login 
 }
@@ -244,7 +249,8 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
+                  message:err.message,
+                  status:"fail"
               })  
     }
 
@@ -277,8 +283,9 @@ const logout = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
-              })  
+                  message:err.message,
+                  status:"fail"
+              }) 
     }
 }
 
@@ -368,7 +375,8 @@ const oAuthHandler = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
+                  message:err.message,
+                  status:"fail"
               })  
     }
 }
@@ -410,8 +418,9 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
-              })  
+                  message:err.message,
+                  status:"fail"
+              }) 
     }
 }
 
@@ -472,8 +481,9 @@ const refreshAccessTokenHandler = async (req:Request,res:Response) => {
         return res
         .status(statusCode)
         .json({
-            message:err.message
-        })
+                  message:err.message,
+                  status:"fail"
+              }) 
 
         // return res
         //.status(err.status)

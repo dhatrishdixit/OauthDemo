@@ -45,7 +45,8 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
               return res
               .status(statusCode)
               .json({
-                  message:err.message
+                  message:err.message,
+                  status:"fail"
               })  
     }
 }

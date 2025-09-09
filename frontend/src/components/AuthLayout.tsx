@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from "@/hooks/authState";
+import { useAuth, type userType } from "@/hooks/authState";
 import { Loader } from "./loader";
+import axios from "axios";
 
 type AuthLayoutProps = {
     children : React.ReactNode,
@@ -9,20 +10,79 @@ type AuthLayoutProps = {
 }
 
 export const Protected = ({children,authentication=true}:AuthLayoutProps) => {
-    const authStatus = useAuth()?.user !== null ;
+    const {user,login} = useAuth();
     const navigate = useNavigate();
-    const [loader,setLoader] = useState<boolean>(true);
+    const [loader,setLoader] = useState<boolean>(false);
+    
+
 
     useEffect(()=>{
-
         
+        const AuthHandler = async() => {
+          try {
+            const res = await axios
+            .get(`${process.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
+                withCredentials:true
+            })
 
-        if(authentication && authStatus !== authentication) navigate("/login");
-        else if(!authentication && authStatus !== authentication) navigate("/home")
-        setLoader(false);
-    },[authentication,authStatus,navigate])
+            login(res.data.data as userType);
+            return true ;
+
+          } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+              console.log("Authentication error in authLayout", error.response.data.message);
+            } else {
+              console.log("Unknown error in authLayout", error);
+            }
+            try {
+                // use refresh token to generate a new access token , and after that try again 
+
+                await axios
+                .post(`${process.env.VITE_BACKEND_URI}/v1/auth/refreshAccessToken`,null,{
+                withCredentials:true
+                 });
+
+                const retryRes = await axios
+                                 .get(`${process.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
+                                    withCredentials:true
+                                 });
+                
+
+                login(retryRes.data.data as userType);
+                return true;
 
 
+            } catch (error:unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+              console.log("Authentication error in authLayout", error.response.data.message);
+            } else {
+              console.log("Unknown error in authLayout", error);
+            }
+             return false ;
+            }
+
+          }
+    }
+
+
+         async function checkAuth(){            
+               setLoader(true);
+               let authStatus = user !== null ;
+               if(!authStatus){
+                  const res = await AuthHandler();
+                  authStatus = res;
+               }
+            if(authentication && authStatus !== authentication) navigate("/login");
+            else if(!authentication && authStatus !== authentication) navigate("/home")
+            setLoader(false);
+         }
+
+         checkAuth();
+    },[authentication,navigate,user,login])
+
+
+
+ 
 //   No dependency array → effect runs after every render, cleanup runs before the next effect → mount + unmount logs every render.
 
 // Empty dependency array → effect runs once on mount, cleanup runs only on unmount.

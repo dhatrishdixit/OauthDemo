@@ -9,6 +9,7 @@ type AuthType = "GoogleLogin" | "PasswordLogin" | "Both"
 type userType = {
      id:string,
      name:string,
+     email:string,
      authType: AuthType
 }
 
