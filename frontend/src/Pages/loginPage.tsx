@@ -1,6 +1,6 @@
 import { LoginForm } from '@/components/loginForm'
 
-function loginPage() {
+export function LoginPage() {
   return (
     <div className="w-full max-w-sm">
                <LoginForm />
@@ -8,4 +8,3 @@ function loginPage() {
   )
 }
 
-export default loginPage

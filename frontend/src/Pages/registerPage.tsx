@@ -1,7 +1,7 @@
 import { RegisterForm } from '@/components/registerForm'
 import React from 'react'
 
-function registerPage() {
+export function RegisterPage() {
   return (
         <div className="w-full max-w-sm">
            <RegisterForm />
@@ -10,4 +10,3 @@ function registerPage() {
   
 }
 
-export default registerPage
