@@ -73,7 +73,7 @@ const formattedDate = now.toLocaleString('en-US', options);
            });
 
            login(response.data.data);
-           toast(`Hi , ${response.data.data.name} you have been logged in`,{
+           toast(`Hi , ${response.data.data.name} you have been logged on`,{
             description: formattedDate,
             action: {
             label: "Ok",
@@ -135,7 +135,7 @@ const formattedDate = now.toLocaleString('en-US', options);
                 id="password" 
                 type="password" 
                 className="text-white" 
-                placeholder="password" 
+                placeholder="••••••••" 
                 required
                 {...register("password")}
                 />
