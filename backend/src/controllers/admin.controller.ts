@@ -84,10 +84,21 @@ const allUserInfo = async (req:Request,res:Response) => {
     }
 }
 
+const verifyAdmin = async (req:Request,res:Response) => {
+    
+       return res
+       .status(201)
+       .json({
+          status:"success"
+       })
+
+}
+
 
 export {
     adminLogin,
-    allUserInfo
+    allUserInfo,
+    verifyAdmin
 }
 
  

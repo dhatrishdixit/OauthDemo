@@ -1,3 +1,5 @@
 export function AdminLoginPage(){
-
+     return (
+        <></>
+     ) 
 }

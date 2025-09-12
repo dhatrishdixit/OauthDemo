@@ -113,41 +113,14 @@ const getCurrentUser = async (req:Request,res:Response) => {
 
 
 const getUserById = async (req:Request,res:Response) => {
-       
-       const { id } = req.body ;
-       
-       try {
-                
-       const user =  await db.user.findUnique({
-           where : {
-               id 
-           },
-           select : {
-               id : true ,
-               name : true,
-               email : true,
-               authType : true
-           }
-       }) 
-
+         
        return res
        .status(201)
        .json({
           message:"user found",
-          data : user
+          data : req.user
        })
 
-
-       } catch (error:any) {
-        const err : ApiErrorTypes = error as ApiErrorTypes ;
-        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
-              return res
-              .status(statusCode)
-              .json({
-                  message:err.message,
-                  status:"fail"
-              })  
-    }
 }
 
 

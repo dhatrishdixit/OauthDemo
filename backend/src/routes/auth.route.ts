@@ -18,13 +18,13 @@ const router = Router();
 //unsecured routes 
 router.route("/login").post(loginUserByCredentials);
 router.route("/register").post(validateUserData,registerUserByCredentials);
-router.route("/currentUser").get(getCurrentUser);
 
 // think for this you will have to add a different middleware inbetween validation
 router.route("/googleOAuth").post(oAuthHandler);
 
 
 //secured routes 
+router.route("/currentUser").get(verifyJWT,getCurrentUser);
 router.route("/getUserData").get(verifyJWT,getUserById);
 router.route("/refreshAccessToken").post(verifyJWT,refreshAccessTokenHandler);
 router.route("/addPasswordOAuth").post(verifyJWT,openIdPasswordAdditionAndChange);

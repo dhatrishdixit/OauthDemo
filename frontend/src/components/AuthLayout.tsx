@@ -9,7 +9,7 @@ type AuthLayoutProps = {
     authentication : boolean
 }
 
-export const Protected = ({children,authentication=true}:AuthLayoutProps) => {
+export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
     const {user,login} = useAuth();
     const navigate = useNavigate();
     const [loader,setLoader] = useState<boolean>(false);
