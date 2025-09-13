@@ -3,7 +3,7 @@ import React,{ useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "./loader";
 
-export function AdminLayout({children}:{children:React.ReactNode}){
+export function AdminLayout(){
 
     const [isAdmin,setIsAdmin] = useState(false);
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ export function AdminLayout({children}:{children:React.ReactNode}){
 
     },[loader,isAdmin,navigate])
 
-    return loader ? <div><Loader/></div> : <div>{children }</div> 
+    return loader ? <div><Loader/></div> : null
 
     
 }
