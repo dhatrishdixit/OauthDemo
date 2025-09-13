@@ -13,7 +13,7 @@ dotenv.config({
 })
 
 const corsOption = {
-  origin: process.env.APP_ENV == 'developement' ? '*' : process.env.ORIGIN,
+  origin:  process.env.ORIGIN,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }

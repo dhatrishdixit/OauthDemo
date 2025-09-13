@@ -21,7 +21,7 @@ export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
         const AuthHandler = async() => {
           try {
             const res = await axios
-            .get(`${process.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
+            .get(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
                 withCredentials:true
             })
 
@@ -38,12 +38,12 @@ export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
                 // use refresh token to generate a new access token , and after that try again 
 
                 await axios
-                .post(`${process.env.VITE_BACKEND_URI}/v1/auth/refreshAccessToken`,null,{
+                .post(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/refreshAccessToken`,null,{
                 withCredentials:true
                  });
 
                 const retryRes = await axios
-                                 .get(`${process.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
+                                 .get(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
                                     withCredentials:true
                                  });
                 

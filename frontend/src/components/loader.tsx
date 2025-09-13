@@ -11,7 +11,7 @@ export function Loader() {
 
 
   return (
-    <div>
+    <div className="bg-black">
       <MoonLoader
         color="#d607b1"
         cssOverride={override}

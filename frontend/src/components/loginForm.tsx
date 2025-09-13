@@ -63,7 +63,7 @@ const formattedDate = now.toLocaleString('en-US', options);
   
   const onSubmit:SubmitHandler<formFields> = async (data) => {
         try {
-           const response = await axios.post(`${process.env.VITE_BACKEND_URI}/v1/auth/login`,{
+           const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/login`,{
                email:data.email,
                password:data.password
            },{

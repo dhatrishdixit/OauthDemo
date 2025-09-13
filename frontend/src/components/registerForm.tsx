@@ -70,7 +70,7 @@ const formattedDate = now.toLocaleString('en-US', options);
           return ;
           }
           
-           const response = await axios.post(`${process.env.VITE_BACKEND_URI}/v1/auth/register`,{
+           const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/register`,{
                name:data.name,
                email:data.email,
                password:data.password,
@@ -188,7 +188,7 @@ const formattedDate = now.toLocaleString('en-US', options);
                 </div>
 
               <div className="flex flex-col gap-3 items-center">
-                <Button type="submit" variant="outline" className="w-full text-white w-fit cursor-pointer">
+                <Button type="submit" variant="outline" className="w-full text-white cursor-pointer">
                   {
                     isSubmitting ? ( <> <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                     Please wait</>) : "Sign Up"

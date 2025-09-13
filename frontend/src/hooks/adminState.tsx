@@ -10,7 +10,7 @@ export const useAdminState = () => {
 
     useEffect(()=>{
      
-        axios.get(`${process.env.VITE_BACKEND_URI}/v1/admin/verifyAdmin`,{
+        axios.get(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/verifyAdmin`,{
             withCredentials:true
         }).then(res => {
             if(res?.data.status == "success"){

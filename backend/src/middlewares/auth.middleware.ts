@@ -8,6 +8,8 @@ const db = new PrismaClient();
 
 export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
        try {
+
+          console.log(req.cookies?.accessToken)
           
           const cookie = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","") ;
 
@@ -36,7 +38,12 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
 
           if(! ( userInfo && userInfo.refreshToken )) throw new ApiError(401,"invalid accessToken");
 
-          req.user = userInfo;
+          req.user = {
+            id:userInfo.id,
+            name:userInfo.name,
+            email:userInfo.email,
+            authType:userInfo.authType
+          };
           next();
 
        } catch (error:any) {

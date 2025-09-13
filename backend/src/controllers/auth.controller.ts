@@ -16,18 +16,26 @@ const db = new PrismaClient();
 // Google Create Account 
 // refresh access token
 
+// const accessTokenCookieOption = {
+//     httpOnly : true,
+//     secure : process.env.APP_ENV !== "development" ,
+//     sameSite : process.env.APP_ENV === "development" ? "none" : "strict" as
+//     | boolean
+//     | "none"
+//     | "lax"
+//     | "strict",
+//     expires : new Date(
+//         Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
+//     ) 
+// }
+
 const accessTokenCookieOption = {
-    httpOnly : true,
-    secure : process.env.APP_ENV !== "development" ,
-    sameSite : process.env.APP_ENV === "development" ? "none" : "strict" as
-    | boolean
-    | "none"
-    | "lax"
-    | "strict",
-    expires : new Date(
-        Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
-    ) 
+    httpOnly: true,
+    secure: false, // Must be false for localhost in development
+    sameSite: "lax" as "lax", // Required for cross-origin
+    domain: "localhost", // Explicitly set domain
 }
+
 const refreshTokenCookieOption = {
     httpOnly : true,
     secure : process.env.APP_ENV !== "development" ,
@@ -62,53 +70,13 @@ function generateAccessToken(id:string){
 
 
 const getCurrentUser = async (req:Request,res:Response) => {
-    try {
-        
-        const cookie = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","") ;
-
-        if(!cookie) throw new ApiError(401,"accessToken not present");
-                  
-                  type payloadType = {
-                    id : string ,
-                    iat : number
-                  }
-        const payload:payloadType = jwt.verify(cookie,process.env.ACCESS_TOKEN_SECRET as string) as payloadType ;
-                  
-        const id = payload.id;
-
-        const user =  await db.user.findUnique({
-           where : {
-               id 
-           },
-           select : {
-               id : true ,
-               name : true,
-               email : true,
-               authType : true
-           }
-       }) 
-       
        return res
        .status(201)
        .json({
-          data:user,
-          success:true  
-       });
-        
+          data:req.user,
+          status:"success"
+       })
 
-    } catch (error:any) {
-
-        const err : ApiErrorTypes = error as ApiErrorTypes ;
-        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
-        
-        return res
-        .status(statusCode)
-        .json({
-                  message:err.message,
-                  status:"fail"
-              }) 
-
-    }
 }
 
 

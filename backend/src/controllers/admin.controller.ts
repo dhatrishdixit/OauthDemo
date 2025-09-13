@@ -89,7 +89,7 @@ const verifyAdmin = async (req:Request,res:Response) => {
        return res
        .status(201)
        .json({
-          status:"success"
+          success:"true"
        })
 
 }
