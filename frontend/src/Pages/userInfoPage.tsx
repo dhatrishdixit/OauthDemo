@@ -10,7 +10,9 @@ export function UserInfoPage() {
   const [isLoading,setIsLoading] = useState(true);
 
   useEffect(()=>{
-      axios(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/currentUser`)
+      axios(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
+        withCredentials:true
+      })
       .then(res => {
         setUserInfo(res.data.data);
       })

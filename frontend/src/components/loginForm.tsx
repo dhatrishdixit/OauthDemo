@@ -69,7 +69,8 @@ const formattedDate = now.toLocaleString('en-US', options);
            },{
              headers:{
               "Content-Type":"application/json"
-             }
+             },
+             withCredentials:true
            });
 
            login(response.data.data);

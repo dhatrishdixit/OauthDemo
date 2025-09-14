@@ -16,30 +16,23 @@ const db = new PrismaClient();
 // Google Create Account 
 // refresh access token
 
-// const accessTokenCookieOption = {
-//     httpOnly : true,
-//     secure : process.env.APP_ENV !== "development" ,
-//     sameSite : process.env.APP_ENV === "development" ? "none" : "strict" as
-//     | boolean
-//     | "none"
-//     | "lax"
-//     | "strict",
-//     expires : new Date(
-//         Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
-//     ) 
-// }
-
 const accessTokenCookieOption = {
-    httpOnly: true,
-    secure: false, // Must be false for localhost in development
-    sameSite: "lax" as "lax", // Required for cross-origin
-    domain: "localhost", // Explicitly set domain
+    httpOnly : true,
+    secure : process.env.APP_ENV !== "development" ,
+    sameSite : process.env.APP_ENV === "development" ? "lax" : "strict" as
+    | boolean
+    | "none"
+    | "lax"
+    | "strict",
+    expires : new Date(
+        Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
+    ) 
 }
 
 const refreshTokenCookieOption = {
     httpOnly : true,
     secure : process.env.APP_ENV !== "development" ,
-    sameSite : process.env.APP_ENV === "development" ? "none" : "strict" as
+    sameSite : process.env.APP_ENV === "development" ? "lax" : "strict" as
     | boolean
     | "none"
     | "lax"
