@@ -73,7 +73,7 @@ export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
                   authStatus = res;
                }
             if(authentication && authStatus !== authentication) navigate("/login");
-            else if(!authentication && authStatus !== authentication) navigate("/home")
+            else if(!authentication && authStatus !== authentication) navigate("/")
             setLoader(false);
          }
 

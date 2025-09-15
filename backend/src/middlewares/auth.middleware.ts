@@ -9,7 +9,7 @@ const db = new PrismaClient();
 export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
        try {
 
-          console.log(req.cookies?.accessToken)
+          //console.log(req.cookies?.accessToken)
           
           const cookie = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","") ;
 
