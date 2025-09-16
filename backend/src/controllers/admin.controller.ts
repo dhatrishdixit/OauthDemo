@@ -94,11 +94,73 @@ const verifyAdmin = async (req:Request,res:Response) => {
 
 }
 
+const deleteuUserById = async (req:Request,res:Response) => {
+    try {
+
+        const { id } = req.body ;
+        
+        const change = await db.user.delete({
+            where:{
+                id
+            }
+        });
+
+        console.log(change)
+        
+        return res.status(201).json({
+            message:"user deleted successfully",
+            status:"success"
+        })
+
+
+    } catch (error) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message,
+                  status:"fail"
+              }) 
+    }
+    
+}
+
+const logoutUserById = async (req:Request,res:Response) => {
+     try {
+        const { id } = req.body ;
+
+        await db.user.update({
+            where : { id },
+            data : {
+                refreshToken:null
+            }
+        });
+
+        return res.status(201).json({
+            message:"user successfully logged out",
+            status:"success"
+        })
+
+     } catch (error) {
+        const err : ApiErrorTypes = error as ApiErrorTypes ;
+        const statusCode = typeof err.status === "number" ? err.status : 501 ; 
+              return res
+              .status(statusCode)
+              .json({
+                  message:err.message,
+                  status:"fail"
+              }) 
+    }
+}
+
 
 export {
     adminLogin,
     allUserInfo,
-    verifyAdmin
+    verifyAdmin,
+    deleteuUserById,
+    logoutUserById
 }
 
  

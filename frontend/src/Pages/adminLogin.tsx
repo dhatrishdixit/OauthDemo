@@ -12,6 +12,7 @@ import { useAdminState } from "@/hooks/adminState";
 import { useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
+import { Loader } from "@/components/loader";
 
 export function AdminLoginPage({
   className,
@@ -94,7 +95,7 @@ export function AdminLoginPage({
     }
   };
 
-  return (
+  return isLoading ? (<div><Loader/></div>) : (
     <div className="flex h-screen w-screen items-center justify-center dark:bg-gray-900">
     <div
       className={cn(
