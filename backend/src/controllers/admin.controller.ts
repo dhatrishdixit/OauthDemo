@@ -99,16 +99,16 @@ const deleteuUserById = async (req:Request,res:Response) => {
 
         const { id } = req.body ;
         
-        const change = await db.user.delete({
+        const user = await db.user.delete({
             where:{
                 id
             }
         });
 
-        console.log(change)
         
         return res.status(201).json({
             message:"user deleted successfully",
+            user:user,
             status:"success"
         })
 

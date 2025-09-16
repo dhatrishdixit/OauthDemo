@@ -14,8 +14,8 @@ router.route("/login").post(adminLogin);
 
 router.route("/userInfo").get(verifyJWT,validateAdmin,allUserInfo);
 router.route("/verifyAdmin").get(verifyJWT,validateAdmin,verifyAdmin);
-router.route("/deleteUser").get(verifyJWT,validateAdmin,deleteuUserById);
-router.route("/logoutUser").get(verifyJWT,validateAdmin,logoutUserById)
+router.route("/deleteUser").delete(verifyJWT,validateAdmin,deleteuUserById);
+router.route("/logoutUser").put(verifyJWT,validateAdmin,logoutUserById)
 
 
 export default router ;

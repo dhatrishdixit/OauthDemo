@@ -28,7 +28,7 @@ router.route("/currentUser").get(verifyJWT,getCurrentUser);
 router.route("/getUserData").get(verifyJWT,getUserById);
 router.route("/refreshAccessToken").post(verifyJWT,refreshAccessTokenHandler);
 router.route("/addPasswordOAuth").post(verifyJWT,openIdPasswordAdditionAndChange);
-router.route("/logout").post(verifyJWT,logout);
+router.route("/logout").put(verifyJWT,logout);
   
 export default router ;
 
