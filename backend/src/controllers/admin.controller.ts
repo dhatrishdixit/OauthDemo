@@ -10,7 +10,7 @@ const db = new PrismaClient();
 const adminCookieOptions = {
     httpOnly : true,
     secure : process.env.APP_ENV !== "development" ,
-    sameSite : process.env.APP_ENV === "development" ? "none" : "strict" as
+    sameSite : process.env.APP_ENV === "development" ? "lax" : "strict" as
     | boolean
     | "none"
     | "lax"
