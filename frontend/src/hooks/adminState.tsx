@@ -13,6 +13,7 @@ export const useAdminState = () => {
         axios.get(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/verifyAdmin`,{
             withCredentials:true
         }).then(res => {
+            console.log(res.data)
             if(res?.data.status == "success"){
                 setIsAdminVerified(true);    
             }

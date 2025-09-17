@@ -53,6 +53,8 @@ export function AdminLoginPage({
   const formattedDate = now.toLocaleString("en-US", options);
 
   useEffect(()=>{
+    console.log("isAdminVerified",isAdminVerified)
+    console.log(isLoading == false && isAdminVerified)
     if(isLoading == false && isAdminVerified) navigate("/adminDashboard");
   },[isAdminVerified,isLoading,navigate])
 

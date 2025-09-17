@@ -8,6 +8,7 @@ import { LoginPage } from './Pages/loginPage';
 import { RegisterPage } from './Pages/registerPage'
 import { UserInfoPage } from './Pages/userInfoPage'
 import { AdminLoginPage } from './Pages/adminLogin'
+import { AdminPage } from './Pages/adminPage'
 
 
 
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
     path:"/adminDashboard",
     element:(
       <AuthLayout authentication={true}>
-        <AdminLoginPage/>
+        <AdminPage/>
       </AuthLayout>
     )
   }
