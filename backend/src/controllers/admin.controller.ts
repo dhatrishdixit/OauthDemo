@@ -63,7 +63,17 @@ const adminLogin = async (req:Request,res:Response) => {
 
 const allUserInfo = async (req:Request,res:Response) => {
      try {
-        const userData = await db.user.findMany();
+        const userData = await db.user.findMany({
+              select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    authType: true,
+                    refreshToken: true,
+                }
+        });
         
 
         return res.status(200)
