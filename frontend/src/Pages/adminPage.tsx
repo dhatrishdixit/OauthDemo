@@ -35,7 +35,7 @@ export function AdminPage() {
   const {isAdminVerified,isLoading} = useAdminState();
 
   useEffect(()=>{
-    if(isLoading == false && isAdminVerified) navigate("/adminDashboard");
+    if(isLoading == false && !isAdminVerified) navigate("/adminLogin");
   },[isAdminVerified,isLoading,navigate]);
 
   useEffect(()=>{
