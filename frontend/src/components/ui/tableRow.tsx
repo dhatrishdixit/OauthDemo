@@ -17,7 +17,8 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
    
      
     return (
-        <TableRow>
+        <TableRow className="">
+          <TableRow>{props.ind}</TableRow>
           <TableCell>{props.name}</TableCell>
           <TableCell>{props.email}</TableCell>
           <TableCell>{formatDate(props.createdAt)}</TableCell>

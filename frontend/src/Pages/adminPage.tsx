@@ -23,7 +23,7 @@ type userType = {
 }
 
 
-export type RowPropType = Omit<userType,'id'> & { key:string, setRefresh:React.Dispatch<React.SetStateAction<boolean>> }
+export type RowPropType = userType & { ind:number, setRefresh:React.Dispatch<React.SetStateAction<boolean>> }
 
 
 export function AdminPage() {
@@ -48,8 +48,8 @@ export function AdminPage() {
   },[refresh])
 
   return (
-    <div>
-       <Table>
+    <div className="h-screen w-screen overflow-y-scroll flex justify-center items-center">
+       <Table className="w-[80vw]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">S. No.</TableHead>
@@ -63,9 +63,11 @@ export function AdminPage() {
         </TableHeader>
         <TableBody>
            {
-              users?.map(data=>(
+              users?.map((data,ind)=>(
                 <TableRowCustom
                     key={data.id}
+                    ind={ind}
+                    id={data.id}
                     email={data.email}
                     name = {data.name}
                     createdAt={data.createdAt}
