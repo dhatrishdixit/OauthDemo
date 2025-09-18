@@ -48,7 +48,7 @@ export function AdminPage() {
   },[refresh])
 
   return (
-    <div className="h-screen w-screen overflow-y-scroll flex justify-center items-center">
+    <div className="dark:bg-gray-900 h-screen w-screen overflow-y-scroll flex justify-center items-center">
        <Table className="w-[80vw]">
         <TableHeader>
           <TableRow>
@@ -58,6 +58,7 @@ export function AdminPage() {
             <TableHead>Created At</TableHead>
             <TableHead>Updated At</TableHead>
             <TableHead>Authentication Type</TableHead>
+            <TableHead>Login Status</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>

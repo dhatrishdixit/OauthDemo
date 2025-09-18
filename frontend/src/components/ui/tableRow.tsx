@@ -17,15 +17,16 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
    
      
     return (
-        <TableRow className="">
-          <TableRow>{props.ind}</TableRow>
+        <TableRow className="text-white">
+          <TableCell>{props.ind}</TableCell>
           <TableCell>{props.name}</TableCell>
           <TableCell>{props.email}</TableCell>
           <TableCell>{formatDate(props.createdAt)}</TableCell>
           <TableCell>{formatDate(props.updatedAt)}</TableCell>
           <TableCell>{props.authType}</TableCell>
-          <TableCell>
-            <Button variant="default" disabled={props.refreshToken !== null}>Logout Session</Button>
+          <TableCell>{props.refreshToken ? "user is logged in" : "user not logged in"}</TableCell>
+          <TableCell className="flex gap-3">
+            <Button variant="default" disabled={props.refreshToken == null}>Logout Session</Button>
             <Button variant="destructive">Delete Account</Button>
           </TableCell>
         </TableRow>
