@@ -49,39 +49,48 @@ export function AdminPage() {
 
   return (
     <div className="dark:bg-gray-900 h-screen w-screen overflow-y-scroll flex justify-center items-center">
-       <Table className="w-[80vw]">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">S. No.</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Updated At</TableHead>
-            <TableHead>Authentication Type</TableHead>
-            <TableHead>Login Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-           {
-              users?.map((data,ind)=>(
-                <TableRowCustom
-                    key={data.id}
-                    ind={ind}
-                    id={data.id}
-                    email={data.email}
-                    name = {data.name}
-                    createdAt={data.createdAt}
-                    updatedAt={data.updatedAt}
-                    refreshToken={data.refreshToken}
-                    authType={data.authType}
-                    setRefresh={setRefresh}
-                />
-              ))
-           }
-        </TableBody>
-        
-        </Table> 
+     <Table className="w-[80vw] border border-gray-200 dark:border-gray-700 border-collapse rounded-lg shadow-md">
+  <TableHeader>
+    <TableRow className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+      <TableHead className="w-[80px] px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        S. No.
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        Name
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        Email
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        Created At
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        Updated At
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        Authentication Type
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">
+        Login Status
+      </TableHead>
+      <TableHead className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide">
+        Actions
+      </TableHead>
+    </TableRow>
+  </TableHeader>
+
+  <TableBody>
+    {users?.map((data, ind) => (
+      <TableRowCustom
+        key={data.id}
+        ind={ind + 1}
+        {...data}
+        setRefresh={setRefresh}
+      />
+    ))}
+  </TableBody>
+</Table>
+
     </div>
   )
 }
