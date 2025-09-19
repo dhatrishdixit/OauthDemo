@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/table"
 import { TableRowCustom } from "@/components/ui/tableRow";
 import { useAdminState } from "@/hooks/adminState";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { RefreshCcw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type userType = {
       id:string,
@@ -33,7 +34,7 @@ export function AdminPage() {
 
   const navigate = useNavigate();
   const [refresh,setRefresh] = useState(1);
-  const [users,setUsers] = useState<[userType]>();
+  const [users,setUsers] = useState<userType[]>();
   const [loading,setLoading] = useState(true);
 
   const {isAdminVerified,isLoading} = useAdminState();
@@ -52,7 +53,38 @@ export function AdminPage() {
      })
      .then(res => setUsers(res.data.users))
      .finally(()=>setLoading(false))
-  },[refresh])
+  },[refresh]);
+
+  const handleAdminLogout = async () => {
+    
+       try {
+        
+          await axios.post(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/adminLogout`,null,{
+            withCredentials:true
+          });
+
+          toast("Admin Successfully Logged out",{
+              action: {
+          label: "Ok",
+          onClick: () => {},
+        },
+          })
+
+       } catch (error) {
+           if (error instanceof AxiosError) {
+                         toast("Error during login", {
+                           description: error?.response?.data.message,
+                           action: {
+                             label: "Ok",
+                             onClick: () => {},
+                           },
+                         });
+                 
+                      
+       }
+      }
+
+  }
 
 
   return (
@@ -60,11 +92,15 @@ export function AdminPage() {
       <h1 className="text-3xl p-3">Admin Dashboard</h1>
       {loading ? <Loader/> : (
          <>
-               <div className="flex w-full pl-[10%] gap-2">
-        <div className="flex justify-center items-center">Refresh Table : </div>
-        <Button variant="outline" onClick={()=>{setRefresh(Math.random())}}><RefreshCcw/></Button>
+          <div className="flex w-full px-[10%] justify-between">
+          <div className="flex gap-2">
+             <div className="flex justify-center items-center">Refresh Table : </div>
+             <Button variant="outline" onClick={()=>{setRefresh(Math.random())}}><RefreshCcw/></Button>
+          </div>
+          <Button variant="outline" onClick={handleAdminLogout}>Logout As Admin</Button>
         </div>
-     <Table className="w-[80vw] border border-gray-200 dark:border-gray-700 border-collapse rounded-lg shadow-md">
+        
+     <Table className="w-full px-[10%] border border-gray-200 dark:border-gray-700 border-collapse rounded-lg shadow-md">
   <TableHeader>
     <TableRow className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
       <TableHead className="w-[80px] px-4 py-3 text-left text-sm font-semibold uppercase tracking-wide border-r border-gray-300 dark:border-gray-700">

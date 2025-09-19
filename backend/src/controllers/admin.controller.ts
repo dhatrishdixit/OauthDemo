@@ -164,13 +164,25 @@ const logoutUserById = async (req:Request,res:Response) => {
     }
 }
 
+const logoutAdmin = async (req:Request,res:Response) => {
+      
+      return res
+      .status(201)
+      .clearCookie("adminToken",adminCookieOptions)
+      .json({
+        message:"admin logged out successfully"
+      })
+    
+}
+
 
 export {
     adminLogin,
     allUserInfo,
     verifyAdmin,
     deleteuUserById,
-    logoutUserById
+    logoutUserById,
+    logoutAdmin
 }
 
  
