@@ -2,6 +2,8 @@ import type { JSX } from "react"
 import { TableCell, TableRow } from "./table"
 import { type RowPropType } from "@/Pages/adminPage" 
 import { Button } from "./button";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 
 function formatDate(dateString:string):string {
@@ -42,6 +44,46 @@ function getAuthBadge(authType: string) {
 }
 export function TableRowCustom(props:RowPropType):JSX.Element{
 
+    
+    const handleLogout = async () => {
+        
+      try {
+        const user =  await axios.put(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/logoutUser`,{
+          id:props.id
+        },{
+            headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials:true
+        });
+
+        console.log(user)
+
+         toast("user is logged out",{
+          action:{
+            label:"Ok",
+            onClick : ()=>{}
+          }
+         })
+
+         props.setRefresh(Math.random());
+
+      } catch (error) {
+         if (error instanceof AxiosError) {
+        toast("Error during logging out user", {
+          description: error?.response?.data.message,
+          action: {
+            label: "Ok",
+            onClick: () => {},
+          },
+        });
+      }
+
+    }
+
+
+  }
+
    
      
     return (
@@ -80,7 +122,7 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
           variant="default"
           disabled={props.refreshToken == null}
           className="text-xs px-3 py-1"
-          onClick={()=>{console.log("logout")}}
+          onClick={handleLogout}
         >
           Logout
         </Button>

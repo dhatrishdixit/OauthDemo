@@ -23,13 +23,13 @@ type userType = {
 }
 
 
-export type RowPropType = userType & { ind:number, setRefresh:React.Dispatch<React.SetStateAction<boolean>> }
+export type RowPropType = userType & { ind:number, setRefresh:React.Dispatch<React.SetStateAction<number>> }
 
 
 export function AdminPage() {
 
   const navigate = useNavigate();
-  const [refresh,setRefresh] = useState(false);
+  const [refresh,setRefresh] = useState(1);
   const [users,setUsers] = useState<[userType]>();
 
   const {isAdminVerified,isLoading} = useAdminState();
