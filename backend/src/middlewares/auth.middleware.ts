@@ -22,6 +22,7 @@ export const verifyJWT = async (req:Request,res:Response,next:NextFunction) => {
           const payload:payloadType = jwt.verify(cookie,process.env.ACCESS_TOKEN_SECRET as string) as payloadType ;
           
           const id = payload.id;
+         // console.log(id); So it was not an issue I was just logging out myself
          // console.log("_______________________id________________:",id)
           const userInfo = await db.user.findUnique({
            where : {
