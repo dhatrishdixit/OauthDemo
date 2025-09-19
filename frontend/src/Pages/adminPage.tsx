@@ -1,3 +1,4 @@
+import { Loader } from "@/components/loader";
 import { 
   Table,
   TableBody,
@@ -11,6 +12,8 @@ import { useAdminState } from "@/hooks/adminState";
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { RefreshCcw } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 type userType = {
       id:string,
@@ -31,6 +34,7 @@ export function AdminPage() {
   const navigate = useNavigate();
   const [refresh,setRefresh] = useState(1);
   const [users,setUsers] = useState<[userType]>();
+  const [loading,setLoading] = useState(true);
 
   const {isAdminVerified,isLoading} = useAdminState();
 
@@ -40,15 +44,26 @@ export function AdminPage() {
   },[isAdminVerified,isLoading,navigate]);
 
   useEffect(()=>{
+     console.log("refresh")
+     setLoading(true)
      axios
      .get(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/userInfo`,{
       withCredentials:true
      })
      .then(res => setUsers(res.data.users))
+     .finally(()=>setLoading(false))
   },[refresh])
 
+
   return (
-    <div className="dark:bg-gray-900 h-screen w-screen overflow-y-scroll flex justify-center items-center">
+    <div className="dark:bg-gray-900 h-screen w-screen flex-col overflow-y-scroll overflow-x-hidden flex items-center gap-4">
+      <h1 className="text-3xl p-3">Admin Dashboard</h1>
+      {loading ? <Loader/> : (
+         <>
+               <div className="flex w-full pl-[10%] gap-2">
+        <div className="flex justify-center items-center">Refresh Table : </div>
+        <Button variant="outline" onClick={()=>{setRefresh(Math.random())}}><RefreshCcw/></Button>
+        </div>
      <Table className="w-[80vw] border border-gray-200 dark:border-gray-700 border-collapse rounded-lg shadow-md">
   <TableHeader>
     <TableRow className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
@@ -90,6 +105,9 @@ export function AdminPage() {
     ))}
   </TableBody>
 </Table>
+         </>
+      )}
+
 
     </div>
   )
