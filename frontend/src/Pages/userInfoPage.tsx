@@ -17,7 +17,12 @@ export function UserInfoPage() {
     })
     .catch(err => {
       console.log(err);
-      toast("User not logged in");
+      toast("User not logged in",{
+        action: {
+                    label: "Ok",
+                    onClick: () => {},
+                },
+      });
       setUserInfo(null);
     })
     .finally(() => setIsLoading(false));

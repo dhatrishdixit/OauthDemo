@@ -19,7 +19,12 @@ export const useAdminState = () => {
             }
         }).catch(err => {
             console.log(err);
-            toast("Admin not logged in");
+            toast("Admin not logged in",{
+                 action: {
+                        label: "Ok",
+                        onClick: () => {},
+                    },
+            });
             setIsAdminVerified(false);
         }).finally(()=>setIsLoading(false))
         ;

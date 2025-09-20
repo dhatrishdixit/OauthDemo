@@ -204,12 +204,13 @@ export function LoginForm({
               </div>
             </div>
 
-            <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100">
+            
+              <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100" >
               Don&apos;t have an account?{" "}
-              <p className="underline underline-offset-4 cursor-pointer">
+              <p className="underline underline-offset-4 cursor-pointer" onClick={()=>navigate("/register")}>
                 Sign up
               </p>
-            </div>
+            </div>  
           </form>
         </CardContent>
       </Card>
