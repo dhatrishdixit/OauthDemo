@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { Loader } from "@/components/loader";
+import { ArrowLeft } from "lucide-react";
 
 export function AdminLoginPage({
   className,
@@ -106,6 +107,7 @@ export function AdminLoginPage({
       )}
       {...props}
     >
+      <Button variant="outline" className="absolute top-4 right-4" onClick={()=>navigate("/")}><ArrowLeft /> Go Back to Info Page</Button>
       <Card className="dark:bg-gray-800 dark:border-gray-700 shadow-lg transition-colors duration-300">
         <CardHeader>
           <CardTitle className="text-center text-gray-900 dark:text-white">

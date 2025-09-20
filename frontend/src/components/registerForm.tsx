@@ -63,6 +63,7 @@ export function RegisterForm({
           email: data.email,
           password: data.password,
           confirmPassword: data.confirmPassword,
+          type:"PasswordLogin"
         },
         {
           headers: {
@@ -75,7 +76,7 @@ export function RegisterForm({
         description: formattedDate,
         action: {
           label: "Continue",
-          onClick: () => navigate("/login"),
+          onClick: () => null,
         },
       });
 

@@ -63,12 +63,18 @@ export function AdminPage() {
             withCredentials:true
           });
 
+          setLoading(true);
+
           toast("Admin Successfully Logged out",{
               action: {
           label: "Ok",
           onClick: () => {},
         },
-          })
+          });
+
+          setLoading(false);
+
+          navigate("/adminLogin")
 
        } catch (error) {
            if (error instanceof AxiosError) {
@@ -79,9 +85,9 @@ export function AdminPage() {
                              onClick: () => {},
                            },
                          });
-                 
+              
                       
-       }
+       }setLoading(false);
       }
 
   }

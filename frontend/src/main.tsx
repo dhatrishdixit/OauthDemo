@@ -9,6 +9,8 @@ import { RegisterPage } from './Pages/registerPage'
 import { UserInfoPage } from './Pages/userInfoPage'
 import { AdminLoginPage } from './Pages/adminLogin'
 import { AdminPage } from './Pages/adminPage'
+import { OAuthPage } from './Pages/oAuthPage'
+import { OAuthErrorPage } from './Pages/oAuthErrorPage'
 
 
 
@@ -53,6 +55,18 @@ const router = createBrowserRouter([
       <AuthLayout authentication={true}>
         <AdminPage/>
       </AuthLayout>
+    )
+  },
+  {
+    path:"/auth/google/callback",
+    element:(
+      <OAuthPage/>
+    )
+  },
+  {
+    path:"/auth/google/error",
+    element:(
+      <OAuthErrorPage/>
     )
   }
 ])

@@ -438,7 +438,8 @@ const validateUserData = (req:Request,res:Response,next:NextFunction) => {
              const data = {
                 name :recievedData.name,
                 email :recievedData.email , 
-                authType :recievedData.authType
+                password:recievedData.password,
+                authType:recievedData.type
              }
              userSchema.parse(data);
 
