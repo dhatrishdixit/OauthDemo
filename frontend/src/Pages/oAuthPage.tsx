@@ -14,7 +14,7 @@ export function OAuthPage() {
         if(key == "code"){
            try {
             await axios.post(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/googleOAuth`,{
-                 code : value
+                 authorizationCode : value
            },{
             withCredentials:true
            })

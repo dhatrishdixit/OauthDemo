@@ -226,12 +226,12 @@ const logout = async (req:Request,res:Response) => {
 const oAuthHandler = async (req:Request,res:Response) => {
     
     const { authorizationCode } = req.body;
+
+    try {
+
     if(!authorizationCode) throw new ApiError(401,"authorization code absent") ;
     const googleAuthorizationServer = "https://oauth2.googleapis.com/token";
     const httpMethod = "POST";
-
-
-    try {
          
       const tokenRes = await fetch(googleAuthorizationServer,{
         method:httpMethod,
@@ -240,14 +240,14 @@ const oAuthHandler = async (req:Request,res:Response) => {
             code:authorizationCode,
             client_id:process.env.GOOGLE_CLIENT_ID!,
             client_secret:process.env.GOOGLE_CLIENT_SECRET!,
-            redirect_url:"http://localhost:5173/auth/google/callback",
+            redirect_uri:"http://localhost:5173/auth/google/callback",
             grant_type: "authorization_code",
         })
       })
 
       const token = await tokenRes.json();
 
-      console.log(token);
+      //console.log(token);
 
       const googleAccessToken = token.access_token;
 
@@ -270,7 +270,7 @@ const oAuthHandler = async (req:Request,res:Response) => {
            },
            update:{
               googleId:userInfo.id,
-              authType:"Both"
+              authType: userInfo.authType === "PasswordLogin" ? "Both" : "GoogleLogin" ,
            },
            create:{
               name:userInfo.name,
@@ -345,6 +345,12 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
                 }
             })
         }
+
+        return res.status(200).json({
+            message:"password change",
+            data: userData
+
+        })
 
      } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
