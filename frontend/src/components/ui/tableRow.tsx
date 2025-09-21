@@ -5,6 +5,7 @@ import { Button } from "./button";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { Skeleton } from "./skeleton";
+import { CustomDialog } from './dialogCustom';
 
 
 function formatDate(dateString:string):string {
@@ -91,8 +92,6 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
 
 
   }
-
-   
      
     return (
          <TableRow className="text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-200 dark:border-gray-700">
@@ -136,13 +135,7 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
         >
           Logout
         </Button>
-        <Button
-          variant="destructive"
-          className="text-xs px-3 py-1"
-          onClick={()=>{console.log("delete")}}
-        >
-          Delete
-        </Button>
+        <CustomDialog name={props.name} id={props.id} setIsloading={setIsloading} />
           </>
       )}
       </TableCell>

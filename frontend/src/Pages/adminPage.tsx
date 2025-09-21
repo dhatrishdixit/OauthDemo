@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { RefreshCcw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/authState";
 
 type userType = {
       id:string,
@@ -36,6 +37,8 @@ export function AdminPage() {
   const [refresh,setRefresh] = useState(1);
   const [users,setUsers] = useState<userType[]>();
   const [loading,setLoading] = useState(true);
+  const {user} = useAuth();
+  const {id:userId} = user as userType;
 
   const {isAdminVerified,isLoading} = useAdminState();
 
@@ -137,7 +140,7 @@ export function AdminPage() {
   </TableHeader>
 
   <TableBody>
-    {users?.map((data, ind) => (
+    {users?.filter(user => user.id !==  userId).map((data, ind) => (
       <TableRowCustom
         key={data.id}
         ind={ind + 1}

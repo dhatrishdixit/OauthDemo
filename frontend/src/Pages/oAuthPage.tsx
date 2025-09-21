@@ -38,7 +38,7 @@ export function OAuthPage() {
     oauthHandler()
    
 
-  }, []);
+  }, [oauthHandler]);
 
 
 
