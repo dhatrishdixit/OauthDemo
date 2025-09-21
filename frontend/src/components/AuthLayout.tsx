@@ -12,7 +12,7 @@ type AuthLayoutProps = {
 export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
     const {user,login} = useAuth();
     const navigate = useNavigate();
-    const [loader,setLoader] = useState<boolean>(false);
+    const [loader,setLoader] = useState<boolean>(true);
     
 
 
