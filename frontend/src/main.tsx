@@ -11,6 +11,7 @@ import { AdminLoginPage } from './Pages/adminLogin'
 import { AdminPage } from './Pages/adminPage'
 import { OAuthPage } from './Pages/oAuthPage'
 import { OAuthErrorPage } from './Pages/oAuthErrorPage'
+import { AuthProvider } from './components/AuthProvider'
 
 
 
@@ -73,7 +74,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+       <AuthProvider>
       <RouterProvider router={router}/>
+      </AuthProvider>
        <Toaster/>
     </ThemeProvider>
 )

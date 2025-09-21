@@ -24,6 +24,8 @@ export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
             .get(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
                 withCredentials:true
             })
+            
+            console.log(res.data.data)
 
             login(res.data.data as userType);
             return true ;
@@ -67,6 +69,7 @@ export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
 
          async function checkAuth(){            
                setLoader(true);
+               console.log("user : ",user);
                let authStatus = user !== null ;
                if(!authStatus){
                   const res = await AuthHandler();

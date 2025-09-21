@@ -147,6 +147,8 @@ export function AdminPage() {
         {...data}
         setRefresh={setRefresh}
       />
+    
+    
     ))}
   </TableBody>
 </Table>
