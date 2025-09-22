@@ -38,11 +38,13 @@ export const AuthLayout = ({children,authentication}:AuthLayoutProps) => {
             }
             try {
                 // use refresh token to generate a new access token , and after that try again 
-
-                await axios
+                console.log("retry initiated")
+                const refreshRes = await axios
                 .post(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/refreshAccessToken`,null,{
                 withCredentials:true
                  });
+
+                 console.log("refresh : ",refreshRes);
 
                 const retryRes = await axios
                                  .get(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/currentUser`,{
