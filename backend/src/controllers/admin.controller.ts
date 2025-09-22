@@ -61,7 +61,7 @@ const adminLogin = async (req:Request,res:Response) => {
     }
 }
 
-const allUserInfo = async (req:Request,res:Response) => {
+const allUserInfo = async (_req:Request,res:Response) => {
      try {
         const userData = await db.user.findMany({
               select: {
@@ -94,7 +94,7 @@ const allUserInfo = async (req:Request,res:Response) => {
     }
 }
 
-const verifyAdmin = async (req:Request,res:Response) => {
+const verifyAdmin = async (_req:Request,res:Response) => {
     
        return res
        .status(201)
@@ -107,11 +107,11 @@ const verifyAdmin = async (req:Request,res:Response) => {
 const deleteuUserById = async (req:Request,res:Response) => {
     try {
 
-        const { id } = req.body ;
+        const userId = req.params.id as string ;
         
         const user = await db.user.delete({
             where:{
-                id
+                id:userId
             }
         });
 

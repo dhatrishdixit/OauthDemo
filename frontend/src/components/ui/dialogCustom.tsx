@@ -17,7 +17,7 @@ import { toast } from "sonner"
 type CustomDialogPropType = {
      name : string ,
      id : string ,
-     setIsloading : React.Dispatch<React.SetStateAction<boolean>>
+     setRefresh : React.Dispatch<React.SetStateAction<number>>
 }
 
 export function CustomDialog(props:CustomDialogPropType) {
@@ -25,16 +25,15 @@ export function CustomDialog(props:CustomDialogPropType) {
       const [isOpen,setIsOpen] = useState(false);
       const [loading,setLoading] = useState(false);
 
-      const {name,id,setIsloading} = props ;
+      const {name,id,setRefresh} = props ;
 
       const handleDelete = async () => {
         setIsOpen(true);
-        setIsloading(true);
         setLoading(true);
 
         try {
           
-          await axios.delete(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/logoutUser/${id}`,{
+          await axios.delete(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/deleteUser/${id}`,{
             withCredentials:true
           });
 
@@ -47,7 +46,7 @@ export function CustomDialog(props:CustomDialogPropType) {
 
         } catch (error) {
           if (error instanceof AxiosError) {
-        toast("Error during logging out user", {
+        toast("Error during deleting user", {
           description: error?.response?.data.message,
           action: {
             label: "Ok",
@@ -58,15 +57,15 @@ export function CustomDialog(props:CustomDialogPropType) {
 
         }
 
-        setIsloading(false);
         setIsOpen(false);
-        setLoading(false)
+        setLoading(false);
+        setRefresh(Math.random());
 
     }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <form onSubmit={handleDelete}> 
+      <form> 
         <DialogTrigger asChild>
            <Button
           variant="destructive"
@@ -89,7 +88,7 @@ export function CustomDialog(props:CustomDialogPropType) {
             Please wait</>) : "cancel"
                 }</Button>
             </DialogClose>
-            <Button type="submit" disabled={loading}>{
+            <Button type="submit" onClick={handleDelete} disabled={loading}>{
                    loading ? ( <> <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             Please wait</>) : "delete"
                 }</Button>

@@ -327,7 +327,7 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
         const passwordHash = await bcrypt.hash(newPassword,10);
 
         let userData ;
-        if(changeMode){
+        if(!changeMode){
              userData = await db.user.update({
                 where:{id},
                 data:{

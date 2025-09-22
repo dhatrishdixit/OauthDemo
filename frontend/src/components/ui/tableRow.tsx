@@ -135,7 +135,7 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
         >
           Logout
         </Button>
-        <CustomDialog name={props.name} id={props.id} setIsloading={setIsloading} />
+        <CustomDialog name={props.name} id={props.id} setRefresh={props.setRefresh} />
           </>
       )}
       </TableCell>
