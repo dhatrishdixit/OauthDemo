@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { type userType } from '@/hooks/authState';
+import { useAuth, type userType } from '@/hooks/authState';
 import { toast } from "sonner";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ export function UserInfoPage() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [refresh,setRefresh] = useState(1);
+  const { logout } = useAuth(); 
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -30,7 +31,7 @@ export function UserInfoPage() {
                     onClick: () => {},
                 },
       });
-      
+      logout();
        navigate("/login");
     } catch (error) {
       console.log(error)
