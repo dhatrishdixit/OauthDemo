@@ -17,6 +17,7 @@ export function UserInfoPage() {
   const [refresh,setRefresh] = useState(1);
 
   const handleLogout = async () => {
+    setIsLoading(true);
     try {
       
       await axios.put(`${import.meta.env.VITE_BACKEND_URI}/v1/auth/logout`,null,{
@@ -41,6 +42,9 @@ export function UserInfoPage() {
       });
 
     }
+        setIsLoading(false);
+        setRefresh(Math.random())
+
   }
 
   useEffect(() => {
