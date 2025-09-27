@@ -19,7 +19,7 @@ const db = new PrismaClient();
 const accessTokenCookieOption = {
     httpOnly : true,
     secure : process.env.APP_ENV !== "development" ,
-    sameSite : process.env.APP_ENV === "development" ? "lax" : "strict" as
+    sameSite : process.env.APP_ENV === "development" ? "lax" : "none" as
     | boolean
     | "none"
     | "lax"
@@ -32,7 +32,7 @@ const accessTokenCookieOption = {
 const refreshTokenCookieOption = {
     httpOnly : true,
     secure : process.env.APP_ENV !== "development" ,
-    sameSite : process.env.APP_ENV === "development" ? "lax" : "strict" as
+    sameSite : process.env.APP_ENV === "development" ? "lax" : "none" as
     | boolean
     | "none"
     | "lax"
