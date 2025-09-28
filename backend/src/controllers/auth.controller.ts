@@ -269,7 +269,7 @@ const oAuthHandler = async (req:Request,res:Response) => {
       const userInfo:userInfoType = await userProfile.json();
       console.log(userInfo)
 
-     // console.log(userInfo)
+      console.log(userInfo)
 
       const user = await db.user.upsert({
            where:{
