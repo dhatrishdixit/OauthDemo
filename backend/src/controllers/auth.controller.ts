@@ -24,9 +24,10 @@ const accessTokenCookieOption = {
     | "none"
     | "lax"
     | "strict",
-    expires : new Date(
-        Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
-    ) 
+    // expires : new Date(
+    //     Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
+    // ) 
+    maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY)* 24 * 60 * 60 * 1000
 }
 
 const refreshTokenCookieOption = {
@@ -37,9 +38,10 @@ const refreshTokenCookieOption = {
     | "none"
     | "lax"
     | "strict",
-    expires : new Date(
-        Date.now() + Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
-    ) 
+    // expires : new Date(
+    //     Date.now() + Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
+    // ) 
+    maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY)* 24 * 60 * 60 * 1000
 }
 
 
@@ -148,6 +150,7 @@ const loginUserByCredentials = async (req:Request,res:Response) => {
         const accessToken = generateAccessToken(user.id);
         const refreshToken = generateRefreshToken(user.id);
 
+        
         // console.log("__________accessToken____________",accessToken);
         // console.log("____________refreshToken____________",refreshToken);
         
@@ -229,6 +232,8 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
     try {
 
+    //console.log(authorizationCode)
+    
     if(!authorizationCode) throw new ApiError(401,"authorization code absent") ;
     const googleAuthorizationServer = "https://oauth2.googleapis.com/token";
     const httpMethod = "POST";
@@ -251,7 +256,7 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
       const googleAccessToken = token.access_token;
 
-     console.log(googleAccessToken);
+     //console.log(googleAccessToken);
 
       // fetch user info 
 
@@ -260,13 +265,11 @@ const oAuthHandler = async (req:Request,res:Response) => {
             Authorization:`Bearer ${googleAccessToken}`
          }
       })
-       
-      console.log(userProfile)
 
-      
       const userInfo:userInfoType = await userProfile.json();
-
       console.log(userInfo)
+
+     // console.log(userInfo)
 
       const user = await db.user.upsert({
            where:{
@@ -283,6 +286,9 @@ const oAuthHandler = async (req:Request,res:Response) => {
               googleId:userInfo.id,
            }
       });
+
+      console.log("number is missing -- ",typeof Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY))
+
 
       const accessToken = generateAccessToken(user.id);
       const refreshToken = generateRefreshToken(user.id);
@@ -309,6 +315,8 @@ const oAuthHandler = async (req:Request,res:Response) => {
  
     } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
+
+       console.log("error:-----------------",error)
         const statusCode = typeof err.status === "number" ? err.status : 501 ; 
               return res
               .status(statusCode)

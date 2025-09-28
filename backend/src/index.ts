@@ -1,6 +1,9 @@
+
+import dotenv from "dotenv";
+import path from "path"
+
 import { PrismaClient } from "@prisma/client";
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js"
@@ -9,14 +12,17 @@ import adminRouter from "./routes/admin.route.js"
 export const prisma = new PrismaClient();
 
 dotenv.config({
-    path:"../env"
+    path:path.resolve(import.meta.dirname,"../.env")
 })
+
 
 const corsOption = {
   origin:  process.env.ORIGIN,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }
+
+console.log(process.env.ORIGIN);
 const app = express();
 
 
