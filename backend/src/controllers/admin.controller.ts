@@ -15,9 +15,7 @@ const adminCookieOptions = {
     | "none"
     | "lax"
     | "strict",
-    expires : new Date(
-        Date.now() + Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
-    ) 
+    maxAge: 24 * 60 * 60 * 1000
 }
 
 function generateAdminToken(encryptedKey:string){

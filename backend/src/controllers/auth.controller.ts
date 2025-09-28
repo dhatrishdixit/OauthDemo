@@ -41,7 +41,7 @@ const refreshTokenCookieOption = {
     // expires : new Date(
     //     Date.now() + Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY) * 24 * 60 * 60 * 1000
     // ) 
-    maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_EXPIRY)* 24 * 60 * 60 * 1000
+    maxAge: 10  * 24 * 60 * 60 * 1000
 }
 
 
@@ -232,7 +232,7 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
     try {
 
-    //console.log(authorizationCode)
+    console.log("authorization code -- :",authorizationCode)
     
     if(!authorizationCode) throw new ApiError(401,"authorization code absent") ;
     const googleAuthorizationServer = "https://oauth2.googleapis.com/token";
@@ -256,7 +256,7 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
       const googleAccessToken = token.access_token;
 
-     //console.log(googleAccessToken);
+     console.log("google access token :----",googleAccessToken);
 
       // fetch user info 
 
@@ -267,9 +267,8 @@ const oAuthHandler = async (req:Request,res:Response) => {
       })
 
       const userInfo:userInfoType = await userProfile.json();
-      console.log(userInfo)
 
-      console.log(userInfo)
+      console.log("userInfo from google :-----", userInfo)
 
       const user = await db.user.upsert({
            where:{
