@@ -251,6 +251,8 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
       const googleAccessToken = token.access_token;
 
+     console.log(googleAccessToken);
+
       // fetch user info 
 
       const userProfile = await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{
@@ -259,10 +261,12 @@ const oAuthHandler = async (req:Request,res:Response) => {
          }
       })
        
-    
+      console.log(userProfile)
 
       
       const userInfo:userInfoType = await userProfile.json();
+
+      console.log(userInfo)
 
       const user = await db.user.upsert({
            where:{
