@@ -8,6 +8,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js"
 import adminRouter from "./routes/admin.route.js"
+import healthCheckRouter from "./routes/healthcheck.routes.js"
 
 export const prisma = new PrismaClient();
 
@@ -36,6 +37,7 @@ app.use(express.urlencoded({
 
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/admin",adminRouter);
+app.use("/api/v1/health",healthCheckRouter);
 
 // routes required 
 // create user
