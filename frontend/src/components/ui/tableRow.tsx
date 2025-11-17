@@ -47,7 +47,7 @@ function getAuthBadge(authType: string) {
 export function TableRowCustom(props:RowPropType):JSX.Element{
     
     const handleLogout = async () => {
-      props.setRefresh(Math.random());
+      props.setLoading(true);
       
       try {
         const user = await axios.put(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/logoutUser`,{
@@ -67,6 +67,8 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
             onClick : ()=>{}
           }
         })
+        
+        props.setRefresh(Math.random());
 
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -78,6 +80,7 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
             },
           });
         }
+        props.setLoading(false);
       }
     }
      
@@ -121,7 +124,12 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
           >
             Logout
           </Button>
-          <DeleteBtnDialog name={props.name} id={props.id} setRefresh={props.setRefresh} />
+          <DeleteBtnDialog 
+            name={props.name} 
+            id={props.id} 
+            setRefresh={props.setRefresh}
+            setLoading={props.setLoading}
+          />
         </TableCell>
       </TableRow>
     )

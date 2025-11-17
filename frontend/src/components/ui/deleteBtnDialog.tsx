@@ -16,18 +16,19 @@ import { toast } from "sonner"
 type DeleteBtn = {
   name : string ,
   id : string ,
-  setRefresh : React.Dispatch<React.SetStateAction<number>>
+  setRefresh : React.Dispatch<React.SetStateAction<number>>,
+  setLoading : React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function DeleteBtnDialog(props:DeleteBtn) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const {name, id, setRefresh} = props;
+  const {name, id, setRefresh, setLoading} = props;
 
   const handleDelete = async () => {
     setIsOpen(false);
-    setRefresh(Math.random());
+    setLoading(true);
     
     try {
       await axios.delete(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/deleteUser/${id}`,{
@@ -40,6 +41,8 @@ export function DeleteBtnDialog(props:DeleteBtn) {
           onClick : ()=>{}
         }
       })
+      
+      setRefresh(Math.random());
 
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -51,6 +54,7 @@ export function DeleteBtnDialog(props:DeleteBtn) {
           },
         });
       }
+      setLoading(false);
     }
   }
 
