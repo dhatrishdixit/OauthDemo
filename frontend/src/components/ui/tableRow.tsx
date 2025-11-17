@@ -4,7 +4,7 @@ import { type RowPropType } from "@/Pages/adminPage"
 import { Button } from "./button";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { CustomDialog } from './dialogCustom';
+import { DeleteBtnDialog } from './deleteBtnDialog';
 
 
 function formatDate(dateString:string):string {
@@ -121,7 +121,7 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
           >
             Logout
           </Button>
-          <CustomDialog name={props.name} id={props.id} setRefresh={props.setRefresh} />
+          <DeleteBtnDialog name={props.name} id={props.id} setRefresh={props.setRefresh} />
         </TableCell>
       </TableRow>
     )
