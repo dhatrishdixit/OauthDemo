@@ -56,7 +56,7 @@ export function AdminPage() {
      })
      .then(res => setUsers(res.data.users))
      .finally(()=>setLoading(false))
-  },[refresh,users]);
+  },[refresh]);
 
   const handleAdminLogout = async () => {
     
