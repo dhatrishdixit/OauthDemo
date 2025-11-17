@@ -1,10 +1,9 @@
-import { useState, type JSX } from "react"
+import { type JSX } from "react"
 import { TableCell, TableRow } from "./table"
 import { type RowPropType } from "@/Pages/adminPage" 
 import { Button } from "./button";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { Skeleton } from "./skeleton";
 import { CustomDialog } from './dialogCustom';
 
 
@@ -44,20 +43,17 @@ function getAuthBadge(authType: string) {
       );
   }
 }
+
 export function TableRowCustom(props:RowPropType):JSX.Element{
-
-    const [isLoading,setIsloading] = useState<boolean>(false);
-
     
     const handleLogout = async () => {
+      props.setRefresh(Math.random());
       
-      setIsloading(true);
-
       try {
-        const user =  await axios.put(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/logoutUser`,{
+        const user = await axios.put(`${import.meta.env.VITE_BACKEND_URI}/v1/admin/logoutUser`,{
           id:props.id
         },{
-            headers: {
+          headers: {
             "Content-Type": "application/json",
           },
           withCredentials:true
@@ -65,80 +61,68 @@ export function TableRowCustom(props:RowPropType):JSX.Element{
 
         console.log(user)
 
-         toast("user is logged out",{
+        toast("user is logged out",{
           action:{
             label:"Ok",
             onClick : ()=>{}
           }
-         })
-         setIsloading(false);
-         props.setRefresh(Math.random());
-         
+        })
 
       } catch (error) {
-         if (error instanceof AxiosError) {
-        toast("Error during logging out user", {
-          description: error?.response?.data.message,
-          action: {
-            label: "Ok",
-            onClick: () => {},
-          },
-        });
+        if (error instanceof AxiosError) {
+          toast("Error during logging out user", {
+            description: error?.response?.data.message,
+            action: {
+              label: "Ok",
+              onClick: () => {},
+            },
+          });
+        }
       }
-       setIsloading(false);
-
-
     }
-
-
-  }
      
     return (
-         <TableRow className="text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-200 dark:border-gray-700">
-      <TableCell className="px-4 py-3 font-medium text-gray-800 dark:text-gray-200">
-        {isLoading ? <Skeleton className="w-10 h-[53.84px]"/> : props.ind }
-      </TableCell>
-      <TableCell className="px-4 py-3 text-gray-700 dark:text-gray-300">
-        {isLoading ? <Skeleton className="w-12 h-[53.84px]"/> : props.name}
-      </TableCell>
-      <TableCell className="px-4 py-3 text-gray-700 dark:text-gray-300">
-        {isLoading ? <Skeleton className="w-30 h-[53.84px]"/> : props.email}
-      </TableCell>
-      <TableCell className="px-4 py-3 text-gray-600 dark:text-gray-400">
-        {isLoading ? <Skeleton className="w-20 h-[53.84px]"/> : formatDate(props.createdAt)}
-      </TableCell>
-      <TableCell className="px-4 py-3 text-gray-600 dark:text-gray-400">
-        {isLoading ? <Skeleton className="w-20 h-[53.84px]"/> : formatDate(props.updatedAt)}
-      </TableCell>
-      <TableCell className="px-4 py-3">
-        {isLoading ? <Skeleton className="w-15 h-[53.84px]"/> : getAuthBadge(props.authType)}
-      </TableCell>
-      <TableCell className="px-4 py-3">
-        {isLoading ? <Skeleton className="w-30 h-[53.84px]"/> : (props.refreshToken ? (
-          <span className="text-green-600 dark:text-green-400 font-medium">
-            Logged In
-          </span>
-        ) : (
-          <span className="text-red-600 dark:text-red-400 font-medium">
-            Not Logged In
-          </span>
-        ))}
-      </TableCell>
-      <TableCell className="px-4 py-3 flex gap-2">
-        {isLoading ? <Skeleton className="w-30 h-[53.84px]"/> : (
-          <>
-             <Button
-          variant="default"
-          disabled={props.refreshToken == null}
-          className="text-xs px-3 py-1"
-          onClick={handleLogout}
-        >
-          Logout
-        </Button>
-        <CustomDialog name={props.name} id={props.id} setRefresh={props.setRefresh} />
-          </>
-      )}
-      </TableCell>
-    </TableRow>
+      <TableRow className="text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-200 dark:border-gray-700">
+        <TableCell className="px-4 py-3 font-medium text-gray-800 dark:text-gray-200">
+          {props.ind}
+        </TableCell>
+        <TableCell className="px-4 py-3 text-gray-700 dark:text-gray-300">
+          {props.name}
+        </TableCell>
+        <TableCell className="px-4 py-3 text-gray-700 dark:text-gray-300">
+          {props.email}
+        </TableCell>
+        <TableCell className="px-4 py-3 text-gray-600 dark:text-gray-400">
+          {formatDate(props.createdAt)}
+        </TableCell>
+        <TableCell className="px-4 py-3 text-gray-600 dark:text-gray-400">
+          {formatDate(props.updatedAt)}
+        </TableCell>
+        <TableCell className="px-4 py-3">
+          {getAuthBadge(props.authType)}
+        </TableCell>
+        <TableCell className="px-4 py-3">
+          {props.refreshToken ? (
+            <span className="text-green-600 dark:text-green-400 font-medium">
+              Logged In
+            </span>
+          ) : (
+            <span className="text-red-600 dark:text-red-400 font-medium">
+              Not Logged In
+            </span>
+          )}
+        </TableCell>
+        <TableCell className="px-4 py-3 flex gap-2">
+          <Button
+            variant="default"
+            disabled={props.refreshToken == null}
+            className="text-xs px-3 py-1"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+          <CustomDialog name={props.name} id={props.id} setRefresh={props.setRefresh} />
+        </TableCell>
+      </TableRow>
     )
 }
