@@ -231,8 +231,6 @@ const oAuthHandler = async (req:Request,res:Response) => {
     const { authorizationCode } = req.body;
 
     try {
-
-    console.log("authorization code -- :",authorizationCode)
     
     if(!authorizationCode) throw new ApiError(401,"authorization code absent") ;
     const googleAuthorizationServer = "https://oauth2.googleapis.com/token";
@@ -245,18 +243,14 @@ const oAuthHandler = async (req:Request,res:Response) => {
             code:authorizationCode,
             client_id:process.env.GOOGLE_CLIENT_ID!,
             client_secret:process.env.GOOGLE_CLIENT_SECRET!,
-            redirect_uri:"http://localhost:5173/auth/google/callback",
+            redirect_uri:`${process.env.ORIGIN}/auth/google/callback`,
             grant_type: "authorization_code",
         })
       })
 
       const token = await tokenRes.json();
 
-      //console.log(token);
-
       const googleAccessToken = token.access_token;
-
-     console.log("google access token :----",googleAccessToken);
 
       // fetch user info 
 
@@ -267,8 +261,6 @@ const oAuthHandler = async (req:Request,res:Response) => {
       })
 
       const userInfo:userInfoType = await userProfile.json();
-
-      console.log("userInfo from google :-----", userInfo)
 
       const user = await db.user.upsert({
            where:{
@@ -285,8 +277,6 @@ const oAuthHandler = async (req:Request,res:Response) => {
               googleId:userInfo.id,
            }
       });
-
-      console.log("number is missing -- ",typeof Number(process.env.ACCESS_TOKEN_COOKIE_EXPIRY))
 
 
       const accessToken = generateAccessToken(user.id);
@@ -315,7 +305,6 @@ const oAuthHandler = async (req:Request,res:Response) => {
     } catch (error:any) {
         const err : ApiErrorTypes = error as ApiErrorTypes ;
 
-       console.log("error:-----------------",error)
         const statusCode = typeof err.status === "number" ? err.status : 501 ; 
               return res
               .status(statusCode)
