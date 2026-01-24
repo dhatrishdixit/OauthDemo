@@ -242,9 +242,9 @@ export function RegisterForm({
 
             <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100">
               Already have an account?{" "}
-              <a href="#" className="underline underline-offset-4 cursor-pointer">
+              <p className="underline underline-offset-4 cursor-pointer" onClick={()=>navigate("/login")}>
                 Log in
-              </a>
+              </p>
             </div>
           </form>
         </CardContent>
