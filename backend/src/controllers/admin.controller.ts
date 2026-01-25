@@ -42,7 +42,7 @@ const adminLogin = async (req:Request,res:Response) => {
     .status(201)
     .cookie("adminToken",adminToken,adminCookieOptions)
     .json({
-        message : "admin privilages added to the account",
+        message : "admin privileges added to the account",
         success : true
     })
             
