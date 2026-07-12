@@ -5,8 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npx prisma generate && npx tsc && node dist/index.js",
-    "dev": "tsc -b && node dist/index.js"
+    "build": "npx prisma generate && npx tsc",
+    "start": "pm2 start dist/index.js --name oauth-backend",
+    "restart": "npm run build && pm2 restart oauth-backend",
+    "stop": "pm2 stop oauth-backend",
+    "logs": "pm2 logs oauth-backend"
   },
   "keywords": [],
   "author": "",
