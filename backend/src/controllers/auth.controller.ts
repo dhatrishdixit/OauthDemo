@@ -109,6 +109,11 @@ const registerUserByCredentials = async (req:Request,res:Response) => {
                email,
                passwordHash:hashedPassword,
                authType:"PasswordLogin"
+            },
+            select:{
+                id:true,
+                name:true,
+                authType:true
             }
         });
 
@@ -262,13 +267,24 @@ const oAuthHandler = async (req:Request,res:Response) => {
 
       const userInfo:userInfoType = await userProfile.json();
 
+      const existingUser = await db.user.findUnique({
+        where:{
+            email:userInfo.email
+        },
+        select:{
+            authType:true
+        }
+      })
+
       const user = await db.user.upsert({
            where:{
               email:userInfo.email,
            },
            update:{
               googleId:userInfo.id,
-              authType: userInfo.authType === "PasswordLogin" ? "Both" : "GoogleLogin" ,
+              authType: existingUser?.authType === "PasswordLogin" ? "Both" : (
+                existingUser?.authType === "Both" ? "Both" : "GoogleLogin"
+              ) ,
            },
            create:{
               name:userInfo.name,
@@ -288,6 +304,11 @@ const oAuthHandler = async (req:Request,res:Response) => {
             },
             data:{
                 refreshToken
+            },
+            select:{
+                id:true,
+                name:true,
+                authType:true,
             }
         });
 
@@ -334,6 +355,11 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
                     passwordHash,
                     googleId:null,
                     authType:"PasswordLogin"
+                },
+                select:{
+                    id:true,
+                    name:true,
+                    authType:true
                 }
              })
         }else{
@@ -342,6 +368,11 @@ const openIdPasswordAdditionAndChange = async (req:Request,res:Response) => {
                 data:{
                     passwordHash,
                     authType:"Both"
+                },
+                select:{
+                    id:true,
+                    name:true,
+                    authType:true
                 }
             })
         }

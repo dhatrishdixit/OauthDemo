@@ -17,5 +17,4 @@ export type userInfoType = {
         given_name: string, 
         id: string, 
         verified_email: boolean,
-        authType : authType
       }
