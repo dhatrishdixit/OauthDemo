@@ -194,7 +194,7 @@ export function LoginForm({
                   disabled={isSubmitting}
                   type="button"
                   onClick={()=>{
-                    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=${import.meta.env.VITE_GOOGLE_REDIRECT_URI}&prompt=consent&response_type=code&client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}&scope=${import.meta.env.VITE_GOOGLE_LOGIN_SCOPE}`
+                    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${import.meta.env.VITE_GOOGLE_REDIRECT_URI}&prompt=consent&response_type=code&client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}&scope=${import.meta.env.VITE_GOOGLE_LOGIN_SCOPE}`
                   }}
                 >
                   <FcGoogle />
